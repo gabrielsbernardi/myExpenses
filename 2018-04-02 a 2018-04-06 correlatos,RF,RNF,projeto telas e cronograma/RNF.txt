@@ -1,3 +1,0 @@
-Requisitos Não Funcionais.
-RNF01: O aplicativo deve rodas em Android e IOS.
-RNF02: O aplicativo deve ser desenvolvimento em IONIC.
