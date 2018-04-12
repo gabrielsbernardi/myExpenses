@@ -1,0 +1,6 @@
+Requisitos Funcionais.
+RF01: Permitir cadastrar o salario mensal.
+RF02: Permitir cadastrar as despesas mensais
+RF03: Permitir cadastrar outros créditos do mês.
+RF04: Permitir cadastrar outras despesas do mês.
+RF05: Apresentar o saldo do mês em relação aos créditos e débitos.
