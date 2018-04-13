@@ -1,1 +1,1 @@
-subir no git
+O "Hello World" é o próprio fonte do projeto atual, basta executá-lo.
