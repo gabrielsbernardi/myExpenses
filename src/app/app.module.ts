@@ -4,14 +4,19 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database/database.module';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-
-import { AngularFireModule } from 'angularfire2';
-import { DespesasService } from '../services/despesas.service';
 import { DespesaDetalhePage } from '../pages/despesa-detalhe/despesa-detalhe';
-import { AngularFireDatabaseModule } from 'angularfire2/database/database.module';
-import { AngularFireAuthModule } from 'angularfire2/auth/auth.module';
+import { SigninPage } from '../pages/signin/signin';
+import { SignupPage } from '../pages/signup/signup';
+import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
+
+import { DespesasService } from '../services/despesas.service';
+import { AuthService } from '../providers/auth/auth-service';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -26,7 +31,10 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    DespesaDetalhePage
+    DespesaDetalhePage,
+    SigninPage,
+    SignupPage,
+    ResetpasswordPage
   ],
   imports: [
     BrowserModule,
@@ -39,13 +47,17 @@ export const firebaseConfig = {
   entryComponents: [
     MyApp,
     HomePage,
-    DespesaDetalhePage
+    DespesaDetalhePage,
+    SigninPage,
+    SignupPage,
+    ResetpasswordPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DespesasService
+    DespesasService,
+    AuthService
   ]
 })
 export class AppModule {}
