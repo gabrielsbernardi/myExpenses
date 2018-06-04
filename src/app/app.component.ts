@@ -36,8 +36,8 @@ export class MyApp {
     
     this.pages = [
       { titulo: 'Informações Gerais', component: GeralPage, icon: 'home'},
-      { titulo: 'Categoria', component: CategoriaListPage, icon: 'person'},
-      { titulo: 'Sair', component: 'sair', icon: 'person'}
+      { titulo: 'Categoria', component: CategoriaListPage, icon: 'md-list-box'},
+      { titulo: 'Sair', component: 'sair', icon: 'md-log-out'}
     ];
 
     platform.ready().then(() => {

@@ -14,6 +14,9 @@ import { AuthService } from '../providers/auth/auth-service';
 //Providers
 import { CategoriaProvider } from '../providers/categoria/categoria';
 
+//Pipes
+import { CategoriaSearchPipe } from '../pipes/categoria-search/categoria-search';
+
 //Pages
 import { MyApp } from './app.component';
 import { SigninPage } from '../pages/signin/signin';
@@ -38,7 +41,8 @@ export const firebaseConfig = {
     SignupPage,
     ResetpasswordPage,
     GeralPage,
-    CategoriaListPage
+    CategoriaListPage,
+    CategoriaSearchPipe
   ],
   imports: [
     BrowserModule,

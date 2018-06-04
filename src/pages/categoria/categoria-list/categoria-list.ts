@@ -14,12 +14,14 @@ import { CategoriaProvider } from '../../../providers/categoria/categoria';
   templateUrl: 'categoria-list.html',
 })
 export class CategoriaListPage {
+  showSearchbar: boolean;
   categorias: Observable<any>;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: CategoriaProvider,
               private toast: ToastController) {
+    this.showSearchbar = false;
     this.categorias = this.provider.getAll();
   }
 
@@ -44,5 +46,9 @@ export class CategoriaListPage {
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
+  }
+
+  toggleSearchbar() {
+    this.showSearchbar = !this.showSearchbar;
   }
 }

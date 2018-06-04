@@ -1,15 +1,28 @@
 <ion-header>
+
   <ion-navbar color="primary">
-    <ion-title>
-      Categorias
-    </ion-title>
+    
+    <button ion-button menuToggle left>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    
+    <ion-title>Categorias</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="toggleSearchbar()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+
   </ion-navbar>
+
 </ion-header>
 
 <ion-content padding>
+  <ion-searchbar [(ngModel)]="tipo" placeholder="Tipo" *ngIf="showSearchbar"></ion-searchbar>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let categoria of categorias | async">
+    <ion-item-sliding *ngFor="let categoria of categorias | async | categoriaSearch : tipo">
       <ion-item>
         <h1>{{ categoria.tipo }}</h1>
         <p>{{ categoria.dsc }}</p>
