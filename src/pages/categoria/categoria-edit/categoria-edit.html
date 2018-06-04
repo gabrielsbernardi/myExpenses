@@ -10,13 +10,8 @@
 
     <!-- TIPO -->
     <ion-item>
-      <ion-label stacked>Tipo</ion-label>
+      <ion-label stacked>Tipo *</ion-label>
       <ion-input type="text" formControlName="tipo"></ion-input>
-    </ion-item>
-    <ion-item *ngIf="!form.controls.tipo.valid && (form.controls.tipo.dirty || form.controls.tipo.touched)" color="danger">
-      <div [hidden]="!form.controls.tipo.errors.required">  
-        O campo é obrigatório
-      </div>
     </ion-item>
 
     <!-- DESCRIÇÃO -->
@@ -31,5 +26,11 @@
     </div>
 
   </form>
+
+  <ion-fab bottom right>
+    <button ion-fab color="danger" [disabled]="!navParams.data.categoria" (click)="removeCategoria()">
+      <ion-icon name="trash"></ion-icon>
+    </button>
+  </ion-fab>
 
 </ion-content>

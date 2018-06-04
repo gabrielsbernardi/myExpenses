@@ -1,0 +1,46 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+      
+      <button ion-button menuToggle left>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      
+      <ion-title>Despesas</ion-title>
+  
+      <ion-buttons end>
+        <button ion-button icon-only (click)="toggleSearchbar()">
+          <ion-icon name="search"></ion-icon>
+        </button>
+      </ion-buttons>
+  
+    </ion-navbar>
+  
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-searchbar [(ngModel)]="dsc" placeholder="Descrição" *ngIf="showSearchbar"></ion-searchbar>
+  
+    <ion-list>
+      <ion-item-sliding *ngFor="let despesa of despesas | async | despesaSearch : dsc">
+        <ion-item>
+          <h1>{{ despesa.dsc }}</h1>
+          <p>{{ despesa.valor }}</p>
+        </ion-item>
+        <ion-item-options side="left">
+          <button ion-button color="secondary" (click)="editDespesa(despesa)">
+            <ion-icon name="create"></ion-icon>
+          </button>
+          <button ion-button color="danger" (click)="removeDespesa(despesa)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  
+    <ion-fab bottom right>
+      <button ion-fab color="primary" (click)="newDespesa()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+  </ion-content>

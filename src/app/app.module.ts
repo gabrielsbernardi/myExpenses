@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { ImagePicker } from '@ionic-native/image-picker';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database/database.module';
@@ -13,9 +14,11 @@ import { AuthService } from '../providers/auth/auth-service';
 
 //Providers
 import { CategoriaProvider } from '../providers/categoria/categoria';
+import { DespesaProvider } from '../providers/despesa/despesa';
 
 //Pipes
 import { CategoriaSearchPipe } from '../pipes/categoria-search/categoria-search';
+import { DespesaSearchPipe } from '../pipes/despesa-search/despesa-search';
 
 //Pages
 import { MyApp } from './app.component';
@@ -24,6 +27,7 @@ import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 import { GeralPage } from '../pages/geral/geral';
 import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-list';
+import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -42,7 +46,9 @@ export const firebaseConfig = {
     ResetpasswordPage,
     GeralPage,
     CategoriaListPage,
-    CategoriaSearchPipe
+    CategoriaSearchPipe,
+    DespesaListPage,
+    DespesaSearchPipe
   ],
   imports: [
     BrowserModule,
@@ -58,14 +64,17 @@ export const firebaseConfig = {
     SignupPage,
     ResetpasswordPage,
     GeralPage,
-    CategoriaListPage
+    CategoriaListPage,
+    DespesaListPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
-    CategoriaProvider
+    CategoriaProvider,
+    DespesaProvider,
+    ImagePicker
   ]
 })
 export class AppModule {}

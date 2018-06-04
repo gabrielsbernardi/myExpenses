@@ -5,4 +5,10 @@ ionic g page <page>
 ionic cordova build android
 
 - Criar Provider
-ionic generate provider
+ionic generate provider <provider>
+
+- Criar Pipe
+ionic g pipe <pipe>
+
+-- Intalar Image Picker
+ionic cordova plugin add cordova-plugin-telerik-imagepicker

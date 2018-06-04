@@ -9,14 +9,14 @@ import { AuthService } from '../auth/auth-service';
  */
 @Injectable()
 export class CategoriaProvider {
-  private PATH = 'categorias/';
+  private PATH = 'categorias/' + this.auth.userLogged().uid + "/";
 
   constructor(private db: AngularFireDatabase,
               private auth: AuthService) { 
   }
 
   getAll() {
-    return this.db.list(this.PATH, ref => ref.orderByChild('userId').equalTo(this.getUserId()))
+    return this.db.list(this.PATH, ref => ref.orderByChild('tipo'))
       .snapshotChanges()
       .map(changes => {
         return changes.map(c => ({
@@ -41,14 +41,13 @@ export class CategoriaProvider {
       if (categoria.key) {
         this.db.list(this.PATH)
           .update(categoria.key, { tipo: categoria.tipo, 
-                                   dsc: categoria.dsc})
+                                   dsc: categoria.dsc })
           .then(() => resolve())
           .catch((e) => reject(e));
       } else {
         this.db.list(this.PATH)
           .push({ tipo: categoria.tipo, 
-                  dsc: categoria.dsc,
-                  userId: this.getUserId()})
+                  dsc: categoria.dsc })
           .then(() => resolve());
       }
     });
@@ -56,9 +55,5 @@ export class CategoriaProvider {
 
   remove(key: string) {
     return this.db.list(this.PATH).remove(key);
-  }
-
-  private getUserId() {
-    return this.auth.userLogged().uid;
   }
 }

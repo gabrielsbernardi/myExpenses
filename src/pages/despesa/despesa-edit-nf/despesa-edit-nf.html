@@ -1,0 +1,18 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+  
+      <ion-title> {{ title }}</ion-title>
+  
+    </ion-navbar>
+  
+  </ion-header>
+
+<ion-content padding>
+
+    <ion-item>
+      <img src="{{ despesa.url }}">
+      <button ion-button block color="dark" (click)="escolherFoto()">Escolher Foto</button>
+    </ion-item>
+
+</ion-content>

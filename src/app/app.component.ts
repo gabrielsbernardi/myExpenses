@@ -12,6 +12,7 @@ import { AuthService } from '../providers/auth/auth-service';
 import { SigninPage } from '../pages/signin/signin';
 import { GeralPage } from '../pages/geral/geral';
 import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-list';
+import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
 
 @Component({
   templateUrl: 'app.html'
@@ -37,6 +38,7 @@ export class MyApp {
     this.pages = [
       { titulo: 'Informações Gerais', component: GeralPage, icon: 'home'},
       { titulo: 'Categoria', component: CategoriaListPage, icon: 'md-list-box'},
+      { titulo: 'Despesa', component: DespesaListPage, icon: 'md-list-box'},
       { titulo: 'Sair', component: 'sair', icon: 'md-log-out'}
     ];
 

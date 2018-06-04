@@ -54,6 +54,17 @@ export class CategoriaEditPage {
     }
   }
 
+  removeCategoria() {
+    this.provider.remove(this.categoria.key)
+      .then(() => {
+        this.showMessage('Categoria removida com sucesso');
+        this.navCtrl.pop();
+      })
+      .catch((e) => {
+        this.showMessage('Erro ao remover a Categoria.')
+      });
+  }
+
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();

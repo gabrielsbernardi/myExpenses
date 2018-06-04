@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CategoriaSearchPipe } from './categoria-search/categoria-search';
+import { DespesaSearchPipe } from './despesa-search/despesa-search';
 @NgModule({
-	declarations: [CategoriaSearchPipe],
+	declarations: [CategoriaSearchPipe,
+    DespesaSearchPipe],
 	imports: [],
-	exports: [CategoriaSearchPipe]
+	exports: [CategoriaSearchPipe,
+    DespesaSearchPipe]
 })
 export class PipesModule {}
