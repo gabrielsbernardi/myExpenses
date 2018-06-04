@@ -3,7 +3,7 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { NgForm } from '@angular/forms';
 import { User } from '../../providers/auth/user';
 import { AuthService } from '../../providers/auth/auth-service';
-import { HomePage } from '../home/home';
+import { GeralPage } from '../geral/geral';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -34,7 +34,7 @@ export class SignupPage {
           toast.setMessage('Usuário criado com sucesso.');
           toast.present();
 
-          this.navCtrl.setRoot(HomePage);
+          this.navCtrl.setRoot(GeralPage);
         })
         .catch((error: any) => {
           if (error.code  == 'auth/email-already-in-use') {

@@ -3,12 +3,15 @@ import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { SigninPage } from '../pages/signin/signin';
-import { DespesaDetalhePage } from '../pages/despesa-detalhe/despesa-detalhe';
+import { AngularFireAuth } from 'angularfire2/auth';
+
+//Services
 import { AuthService } from '../providers/auth/auth-service';
 
-import { AngularFireAuth } from 'angularfire2/auth';
+//Pages
+import { SigninPage } from '../pages/signin/signin';
+import { GeralPage } from '../pages/geral/geral';
+import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-list';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,15 +28,15 @@ export class MyApp {
               private authService: AuthService) {
     afAuth.authState.subscribe(user => {
       if (user) {
-        this.rootPage = HomePage;
+        this.rootPage = GeralPage;
       } else {
         this.rootPage = SigninPage;
       }
     });
     
     this.pages = [
-      { titulo: 'Inicio', component: HomePage, icon: 'home'},
-      { titulo: 'Despesa', component: DespesaDetalhePage, icon: 'person'},
+      { titulo: 'Informações Gerais', component: GeralPage, icon: 'home'},
+      { titulo: 'Categoria', component: CategoriaListPage, icon: 'person'},
       { titulo: 'Sair', component: 'sair', icon: 'person'}
     ];
 

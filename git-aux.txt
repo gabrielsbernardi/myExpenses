@@ -1,0 +1,8 @@
+- Criar novo layout
+ionic g page <page>
+
+- Build Android
+ionic cordova build android
+
+- Criar Provider
+ionic generate provider

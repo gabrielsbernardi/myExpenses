@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{ title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <form [formGroup]="form">
+
+    <!-- TIPO -->
+    <ion-item>
+      <ion-label stacked>Tipo</ion-label>
+      <ion-input type="text" formControlName="tipo"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="!form.controls.tipo.valid && (form.controls.tipo.dirty || form.controls.tipo.touched)" color="danger">
+      <div [hidden]="!form.controls.tipo.errors.required">  
+        O campo é obrigatório
+      </div>
+    </ion-item>
+
+    <!-- DESCRIÇÃO -->
+    <ion-item>
+        <ion-label stacked>Descrição</ion-label>
+        <ion-input type="text" formControlName="dsc"></ion-input>
+    </ion-item>
+
+    <!-- BOTÃO SALVAR -->
+    <div>
+      <button ion-button block type="submit" [disabled]="!form.valid" (click)="onSubmit()">Salvar</button>
+    </div>
+
+  </form>
+
+</ion-content>

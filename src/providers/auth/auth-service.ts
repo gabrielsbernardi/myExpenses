@@ -4,6 +4,9 @@ import { AngularFireAuth } from "angularfire2/auth";
 import { User } from "./user";
 import * as firebase from 'firebase/app';
 
+/**
+ * Gabriel Bernardi e Matheus Waltrich
+ */
 @Injectable()
 export class AuthService {
     user: Observable<firebase.User>;
@@ -21,7 +24,6 @@ export class AuthService {
     }
 
     signOut() {
-        this.currentUser = null;
         return this.angularFireAuth.auth.signOut();
     }
 
@@ -29,7 +31,7 @@ export class AuthService {
         return this.angularFireAuth.auth.sendPasswordResetEmail(email);
     }
 
-    currentUser() {
+    userLogged() {
         return firebase.auth().currentUser;
     }
 }

@@ -8,15 +8,19 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database/database.module';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
+//Services
+import { AuthService } from '../providers/auth/auth-service';
+
+//Providers
+import { CategoriaProvider } from '../providers/categoria/categoria';
+
+//Pages
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { DespesaDetalhePage } from '../pages/despesa-detalhe/despesa-detalhe';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
-
-import { DespesasService } from '../services/despesas.service';
-import { AuthService } from '../providers/auth/auth-service';
+import { GeralPage } from '../pages/geral/geral';
+import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-list';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -30,11 +34,11 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    DespesaDetalhePage,
     SigninPage,
     SignupPage,
-    ResetpasswordPage
+    ResetpasswordPage,
+    GeralPage,
+    CategoriaListPage
   ],
   imports: [
     BrowserModule,
@@ -46,18 +50,18 @@ export const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    DespesaDetalhePage,
     SigninPage,
     SignupPage,
-    ResetpasswordPage
+    ResetpasswordPage,
+    GeralPage,
+    CategoriaListPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DespesasService,
-    AuthService
+    AuthService,
+    CategoriaProvider
   ]
 })
 export class AppModule {}

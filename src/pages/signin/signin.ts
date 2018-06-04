@@ -3,8 +3,12 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { SignupPage } from '../signup/signup'
 import { User } from '../../providers/auth/user';
 import { NgForm } from '@angular/forms';
+
+//Services
 import { AuthService } from '../../providers/auth/auth-service';
-import { HomePage } from '../home/home';
+
+//Pages
+import { GeralPage } from '../geral/geral';
 import { ResetpasswordPage } from '../resetpassword/resetpassword';
 
 /**
@@ -39,7 +43,7 @@ export class SigninPage {
 
       this.authService.signIn(this.user)
         .then((user: any) => {
-          this.navCtrl.setRoot(HomePage);
+          this.navCtrl.setRoot(GeralPage);
         })
         .catch((error: any) => {
           if (error.code  == 'auth/invalid-email') {
