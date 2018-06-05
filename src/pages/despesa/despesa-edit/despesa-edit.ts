@@ -51,7 +51,8 @@ export class DespesaEditPage {
   onSubmit() {
     if (this.form.valid) {
       this.provider.save(this.form.value)
-        .then(() => {
+        .then((result: any) => {
+          console.log(result);
           this.showMessage('Despesa salva com sucesso.');
         })
         .catch((e) => {

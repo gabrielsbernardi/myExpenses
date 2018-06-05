@@ -51,10 +51,7 @@ export class DespesaProvider {
                                  local_compra: despesa.local_compra,
                                  data_compra: despesa.data_compra,
                                  num_parcela: despesa.num_parcela })
-          .then(() => {
-            this.gastoProvider.save(despesa, true);
-            resolve()
-          })
+          .then((result: any) => resolve(despesa.key))
           .catch((e) => reject(e));
       } else {
         this.db.list(this.PATH)
@@ -63,10 +60,7 @@ export class DespesaProvider {
                   local_compra: despesa.local_compra,
                   data_compra: despesa.data_compra,
                   num_parcela: despesa.num_parcela })
-          .then(() => {
-            this.gastoProvider.save(despesa, false);
-            (result: any) => resolve(result.key);
-          });
+          .then((result: any) => resolve(result.key));
       }
     });
   }
