@@ -5,7 +5,7 @@
     <ion-title>{{ title }}</ion-title>
 
     <ion-buttons end>
-      <button ion-button icon-only (click)="editDespesaNF()">
+      <button ion-button icon-only [hidden]="!despesa.key" (click)="editDespesaNF()">
         <ion-icon name="md-image"></ion-icon>
       </button>
     </ion-buttons>
@@ -46,6 +46,11 @@
     <ion-item>
       <ion-label stacked>Número de Parcelas *</ion-label>
       <ion-input type="number" formControlName="num_parcela"></ion-input>
+    </ion-item>
+
+    <!-- CATEGORIA -->
+    <ion-item>
+      <ion-label>Categoria</ion-label>
     </ion-item>
 
     <!-- BOTÃO SALVAR -->

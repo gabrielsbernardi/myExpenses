@@ -11,8 +11,12 @@
 <ion-content padding>
 
     <ion-item>
-      <img src="{{ despesa.url }}">
+      <img src="{{ imgPath }}">
       <button ion-button block color="dark" (click)="escolherFoto()">Escolher Foto</button>
     </ion-item>
 
+    <!-- BOTÃO SALVAR -->
+    <div>
+      <button ion-button block type="submit" (click)="onSubmit()">Salvar</button>
+    </div>
 </ion-content>

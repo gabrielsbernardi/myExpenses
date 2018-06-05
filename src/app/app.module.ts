@@ -15,10 +15,12 @@ import { AuthService } from '../providers/auth/auth-service';
 //Providers
 import { CategoriaProvider } from '../providers/categoria/categoria';
 import { DespesaProvider } from '../providers/despesa/despesa';
+import { CreditoProvider } from '../providers/credito/credito';
 
 //Pipes
 import { CategoriaSearchPipe } from '../pipes/categoria-search/categoria-search';
 import { DespesaSearchPipe } from '../pipes/despesa-search/despesa-search';
+import { CreditoSearchPipe } from '../pipes/credito-search/credito-search';
 
 //Pages
 import { MyApp } from './app.component';
@@ -28,6 +30,8 @@ import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 import { GeralPage } from '../pages/geral/geral';
 import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-list';
 import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
+import { CreditoListPage } from '../pages/credito/credito-list/credito-list';
+import { GastoProvider } from '../providers/gasto/gasto';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -48,7 +52,9 @@ export const firebaseConfig = {
     CategoriaListPage,
     CategoriaSearchPipe,
     DespesaListPage,
-    DespesaSearchPipe
+    DespesaSearchPipe,
+    CreditoListPage,
+    CreditoSearchPipe
   ],
   imports: [
     BrowserModule,
@@ -65,7 +71,8 @@ export const firebaseConfig = {
     ResetpasswordPage,
     GeralPage,
     CategoriaListPage,
-    DespesaListPage
+    DespesaListPage,
+    CreditoListPage
   ],
   providers: [
     StatusBar,
@@ -74,7 +81,9 @@ export const firebaseConfig = {
     AuthService,
     CategoriaProvider,
     DespesaProvider,
-    ImagePicker
+    ImagePicker,
+    CreditoProvider,
+    GastoProvider
   ]
 })
 export class AppModule {}

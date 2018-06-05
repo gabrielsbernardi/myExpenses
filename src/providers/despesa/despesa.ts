@@ -6,6 +6,8 @@ import { AuthService } from '../auth/auth-service';
 import { FirebaseApp } from 'angularfire2';
 import * as firebase from 'firebase';
 
+import { GastoProvider } from '../gasto/gasto'
+
 /**
  * Gabriel Bernardi e Matheus Waltrich
  */
@@ -15,7 +17,8 @@ export class DespesaProvider {
 
   constructor(private db: AngularFireDatabase,
               private auth: AuthService,
-              private fb: FirebaseApp) { 
+              private fb: FirebaseApp,
+              private gastoProvider: GastoProvider) { 
   }
 
   getAll() {
@@ -48,7 +51,10 @@ export class DespesaProvider {
                                  local_compra: despesa.local_compra,
                                  data_compra: despesa.data_compra,
                                  num_parcela: despesa.num_parcela })
-          .then(() => resolve())
+          .then(() => {
+            this.gastoProvider.save(despesa, true);
+            resolve()
+          })
           .catch((e) => reject(e));
       } else {
         this.db.list(this.PATH)
@@ -57,7 +63,10 @@ export class DespesaProvider {
                   local_compra: despesa.local_compra,
                   data_compra: despesa.data_compra,
                   num_parcela: despesa.num_parcela })
-          .then(() => resolve());
+          .then(() => {
+            this.gastoProvider.save(despesa, false);
+            (result: any) => resolve(result.key);
+          });
       }
     });
   }
@@ -65,7 +74,9 @@ export class DespesaProvider {
   remove(item: any) {
     return this.db.list(this.PATH).remove(item.key)
       .then(() => {
-        this.removeFile(item.fullPath);
+        if (item.fullPath) {
+          this.removeFile(item.fullPath);
+        }
       });
   }
 

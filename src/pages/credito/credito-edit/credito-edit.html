@@ -1,0 +1,52 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+  
+      <ion-title>{{ title }}</ion-title>
+  
+    </ion-navbar>
+  
+  </ion-header>
+  
+  <ion-content padding>
+  
+    <form [formGroup]="form">
+  
+      <!-- DESCRIÇÃO -->
+      <ion-item>
+        <ion-label stacked>Descrição *</ion-label>
+        <ion-input type="text" formControlName="dsc"></ion-input>
+      </ion-item>
+  
+      <!-- VALOR -->
+      <ion-item>
+          <ion-label stacked>Valor *</ion-label>
+          <ion-input type="number" formControlName="valor"></ion-input>
+      </ion-item>
+  
+      <!-- DATA -->
+      <ion-item>
+        <ion-label stacked>Data da Compra *</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="data_inicial_recebimento"></ion-datetime>
+      </ion-item>
+  
+      <!-- NÚMERO DE PARCELAS -->
+      <ion-item>
+        <ion-label stacked>Número de Parcelas *</ion-label>
+        <ion-input type="number" formControlName="num_parcela"></ion-input>
+      </ion-item>
+  
+      <!-- BOTÃO SALVAR -->
+      <div>
+        <button ion-button block type="submit" [disabled]="!form.valid" (click)="onSubmit()">Salvar</button>
+      </div>
+  
+    </form>
+    
+    <ion-fab bottom right>
+      <button ion-fab color="danger" [disabled]="!navParams.data.credito" (click)="removeCredito()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-fab>
+  
+  </ion-content>

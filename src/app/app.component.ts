@@ -13,6 +13,7 @@ import { SigninPage } from '../pages/signin/signin';
 import { GeralPage } from '../pages/geral/geral';
 import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-list';
 import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
+import { CreditoListPage } from '../pages/credito/credito-list/credito-list';
 
 @Component({
   templateUrl: 'app.html'
@@ -39,6 +40,7 @@ export class MyApp {
       { titulo: 'Informações Gerais', component: GeralPage, icon: 'home'},
       { titulo: 'Categoria', component: CategoriaListPage, icon: 'md-list-box'},
       { titulo: 'Despesa', component: DespesaListPage, icon: 'md-list-box'},
+      { titulo: 'Crédito', component: CreditoListPage, icon: 'md-list-box'},
       { titulo: 'Sair', component: 'sair', icon: 'md-log-out'}
     ];
 

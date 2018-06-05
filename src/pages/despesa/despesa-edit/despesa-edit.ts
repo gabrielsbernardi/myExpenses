@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Observable } from 'rxjs/Observable';
 
 //Provider
 import { DespesaProvider } from '../../../providers/despesa/despesa';
+import { CategoriaProvider } from '../../../providers/categoria/categoria';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -17,12 +19,15 @@ export class DespesaEditPage {
   title: string;
   form: FormGroup;
   despesa: any;
+  categorias: Observable<any>;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private formBuilder: FormBuilder,
               private provider: DespesaProvider,
-              private toast: ToastController) {
+              private toast: ToastController,
+              private categoriaProvider: CategoriaProvider) {
+    this.categorias = this.categoriaProvider.getAll();
     this.despesa = this.navParams.data.despesa || {};
     this.createForm();
     this.setupPageTitle();
