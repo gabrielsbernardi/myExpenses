@@ -32,6 +32,7 @@ import { CategoriaListPage } from '../pages/categoria/categoria-list/categoria-l
 import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
 import { CreditoListPage } from '../pages/credito/credito-list/credito-list';
 import { GastoProvider } from '../providers/gasto/gasto';
+import { GastoListPage } from '../pages/gasto/gasto-list/gasto-list';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -54,7 +55,8 @@ export const firebaseConfig = {
     DespesaListPage,
     DespesaSearchPipe,
     CreditoListPage,
-    CreditoSearchPipe
+    CreditoSearchPipe,
+    GastoListPage
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,8 @@ export const firebaseConfig = {
     GeralPage,
     CategoriaListPage,
     DespesaListPage,
-    CreditoListPage
+    CreditoListPage,
+    GastoListPage
   ],
   providers: [
     StatusBar,

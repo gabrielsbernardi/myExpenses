@@ -6,7 +6,7 @@ import { AuthService } from '../auth/auth-service';
 import { FirebaseApp } from 'angularfire2';
 import * as firebase from 'firebase';
 
-import { GastoProvider } from '../gasto/gasto'
+import { DespesaView } from './despesa-view-values';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -17,8 +17,7 @@ export class DespesaProvider {
 
   constructor(private db: AngularFireDatabase,
               private auth: AuthService,
-              private fb: FirebaseApp,
-              private gastoProvider: GastoProvider) { 
+              private fb: FirebaseApp) { 
   }
 
   getAll() {
@@ -32,6 +31,20 @@ export class DespesaProvider {
       });
   }
 
+  getDespesaViewValues(idDespesa: string) {
+    var despesa;
+    firebase.database().ref(this.PATH).on("child_added", function(d) {
+      if (d.key == idDespesa) {
+        despesa = new DespesaView();
+        despesa.dsc = d.val().dsc;
+        despesa.data = d.val().data_compra;
+        despesa.valor = d.val().valor;
+        return despesa;
+      }
+    });
+    return despesa;
+  }
+
   get(key: string) {
     return this.db.object(this.PATH + key)
       .snapshotChanges()
@@ -39,7 +52,7 @@ export class DespesaProvider {
         return { 
           key: despesa.payload.key,
           ...despesa.payload.val() }
-      });
+     });
   }
 
   save(despesa: any) {
@@ -78,7 +91,7 @@ export class DespesaProvider {
     let despesa = { key: item.key, url: '', fullPath: ''}
 
     let storageRef = this.fb.storage().ref();
-    let basePath = '/despesas/' + this.auth.userLogged().uid + '/';
+    let basePath = this.PATH;
     despesa.fullPath = basePath + despesa.key + '.png';
 
     let uploadTask = storageRef.child(despesa.fullPath).putString(item.fileToUpload, 'base64');

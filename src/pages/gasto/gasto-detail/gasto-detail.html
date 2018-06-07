@@ -1,0 +1,20 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+
+    <ion-title>{{ title }}</ion-title>
+
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-sliding *ngFor="let despesa of despesas">
+      <ion-item>
+        <h1>{{ despesa.dsc }}</h1>
+        <p>{{ despesa.valor }}</p>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

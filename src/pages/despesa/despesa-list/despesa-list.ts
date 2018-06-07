@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 //Provider
 import { DespesaProvider } from '../../../providers/despesa/despesa';
+import { GastoProvider } from '../../../providers/gasto/gasto';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -20,7 +21,8 @@ export class DespesaListPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: DespesaProvider,
-              private toast: ToastController) {
+              private toast: ToastController,
+              private gastoProvider: GastoProvider) {
     this.showSearchbar = false;
     this.despesas = this.provider.getAll();
   }
@@ -36,6 +38,7 @@ export class DespesaListPage {
   removeDespesa(despesa: any) {
     this.provider.remove(despesa)
       .then(() => {
+        this.gastoProvider.remove(despesa.key);
         this.showMessage('Despesa removida com sucesso')
       })
       .catch((e) => {

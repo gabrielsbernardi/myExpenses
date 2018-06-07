@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Observable } from 'rxjs/Observable';
+import { Content } from 'ionic-angular';
 
 //Provider
 import { DespesaProvider } from '../../../providers/despesa/despesa';
 import { CategoriaProvider } from '../../../providers/categoria/categoria';
+import { GastoProvider } from '../../../providers/gasto/gasto';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -15,8 +17,8 @@ import { CategoriaProvider } from '../../../providers/categoria/categoria';
   selector: 'page-despesa-edit',
   templateUrl: 'despesa-edit.html',
 })
-export class DespesaEditPage {
-  title: string;
+export class DespesaEditPage implements AfterViewInit {
+  @ViewChild(Content) content: Content;
   form: FormGroup;
   despesa: any;
   categorias: Observable<any>;
@@ -26,15 +28,21 @@ export class DespesaEditPage {
               private formBuilder: FormBuilder,
               private provider: DespesaProvider,
               private toast: ToastController,
-              private categoriaProvider: CategoriaProvider) {
+              private categoriaProvider: CategoriaProvider,
+              private gastoProvider: GastoProvider) {
     this.categorias = this.categoriaProvider.getAll();
     this.despesa = this.navParams.data.despesa || {};
     this.createForm();
-    this.setupPageTitle();
   }
 
-  private setupPageTitle() {
-    this.title = this.navParams.data.despesa ? 'Alteração de Despesa' : 'Nova Despesa'
+  ngAfterViewInit() {
+    this.setupPage();
+  }
+
+  private setupPage() {
+    if (this.despesa.key) {
+      this.updateBtnImageNF();
+    }
   }
 
   createForm() {
@@ -52,19 +60,30 @@ export class DespesaEditPage {
     if (this.form.valid) {
       this.provider.save(this.form.value)
         .then((result: any) => {
-          console.log(result);
-          this.showMessage('Despesa salva com sucesso.');
+          if (!this.form.value.key) {
+            this.form.value.key = result;
+            this.updateBtnImageNF();
+          } else {
+            this.gastoProvider.remove(this.despesa.key);
+          }
+          this.gastoProvider.save(this.form.value);
+          this.showMessage('Despesa salva com sucesso.')
         })
         .catch((e) => {
           this.showMessage('Erro ao salvar a Despesa.');
           console.error(e);
         });
+        this.despesa = this.form.value;
+        this.createForm();
+        this.content.scrollToTop();
     }
   }
 
   removeDespesa() {
+    var key = this.form.value.key;
     this.provider.remove(this.despesa)
       .then(() => {
+        this.gastoProvider.remove(key);
         this.showMessage('Despesa removida com sucesso');
         this.navCtrl.pop();
       })
@@ -80,5 +99,13 @@ export class DespesaEditPage {
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
+  }
+
+  private updateBtnImageNF() {
+    document.getElementById("btnImageNF").hidden = false;
+  }
+
+  teste() {
+    this.gastoProvider.getAll();
   }
 }
