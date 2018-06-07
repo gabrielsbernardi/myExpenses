@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { User } from '../../providers/auth/user';
 import { AuthService } from '../../providers/auth/auth-service';
 import { GeralPage } from '../geral/geral';
+import { SigninPage } from '../signin/signin';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -49,5 +50,9 @@ export class SignupPage {
           toast.present();
         });
     }
+  }
+
+  voltar() {
+    this.navCtrl.setRoot(SigninPage);
   }
 }

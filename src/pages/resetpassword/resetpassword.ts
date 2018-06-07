@@ -42,4 +42,8 @@ export class ResetpasswordPage {
         });
     }
   }
+
+  voltar() {
+    this.navCtrl.setRoot(SigninPage);
+  }
 }

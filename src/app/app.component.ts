@@ -23,6 +23,7 @@ export class MyApp {
   @ViewChild('NAV') nav: Nav;
   rootPage: any;
   public pages: Array<{ titulo: string, component: any, icon: string }>;
+  isGeralPage = false;
 
   constructor(platform: Platform, 
               statusBar: StatusBar, 
@@ -36,6 +37,8 @@ export class MyApp {
         this.rootPage = SigninPage;
       }
     });
+
+    this.isGeralPage = this.rootPage == GeralPage;
     
     this.pages = [
       { titulo: 'Informações Gerais', component: GeralPage, icon: 'home'},
