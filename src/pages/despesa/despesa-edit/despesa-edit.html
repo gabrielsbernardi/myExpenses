@@ -50,20 +50,24 @@
 
     <!-- CATEGORIA -->
     <ion-item>
-      <ion-label>Categoria</ion-label>
+      <ion-label stacked>Categoria *</ion-label>
+      <ion-select formControlName="id_categoria" interface="popover">
+        <ion-option block [value]="c.key" *ngFor="let c of categorias">{{c.tipo}}</ion-option>
+      </ion-select>
     </ion-item>
 
-    <!-- BOTÃO SALVAR -->
-    <div>
-      <button ion-button block color="color-default-system" type="submit" [disabled]="!form.valid" (click)="onSubmit()">Salvar</button>
-    </div>
-
   </form>
-  
+
   <ion-fab bottom right>
-    <button ion-fab color="danger" [disabled]="!despesa" (click)="removeDespesa()">
-      <ion-icon name="trash"></ion-icon>
-    </button>
+    <button ion-fab mini color="color-default-system"><ion-icon name="arrow-dropup"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab mini color="secondary" type="submit" [disabled]="!form.valid" (click)="onSubmit()">
+          <ion-icon name="bookmark"></ion-icon>
+      </button>
+      <button ion-fab mini color="danger" [disabled]="!despesa" (click)="removeDespesa()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-fab-list>
   </ion-fab>
 
 </ion-content>

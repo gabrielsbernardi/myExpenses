@@ -63,7 +63,8 @@ export class DespesaProvider {
                                  valor: despesa.valor,
                                  local_compra: despesa.local_compra,
                                  data_compra: despesa.data_compra,
-                                 num_parcela: despesa.num_parcela })
+                                 num_parcela: despesa.num_parcela,
+                                 id_categoria: despesa.id_categoria })
           .then((result: any) => resolve(despesa.key))
           .catch((e) => reject(e));
       } else {
@@ -72,7 +73,8 @@ export class DespesaProvider {
                   valor: despesa.valor,
                   local_compra: despesa.local_compra,
                   data_compra: despesa.data_compra,
-                  num_parcela: despesa.num_parcela })
+                  num_parcela: despesa.num_parcela,
+                  id_categoria: despesa.id_categoria })
           .then((result: any) => resolve(result.key));
       }
     });

@@ -8,6 +8,7 @@ import { Content } from 'ionic-angular';
 import { DespesaProvider } from '../../../providers/despesa/despesa';
 import { CategoriaProvider } from '../../../providers/categoria/categoria';
 import { GastoProvider } from '../../../providers/gasto/gasto';
+import { categoriaView } from '../../../providers/categoria/categoria-view-values';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -21,7 +22,7 @@ export class DespesaEditPage implements AfterViewInit {
   @ViewChild(Content) content: Content;
   form: FormGroup;
   despesa: any;
-  categorias: Observable<any>;
+  categorias: Array<categoriaView> = [];
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -30,7 +31,7 @@ export class DespesaEditPage implements AfterViewInit {
               private toast: ToastController,
               private categoriaProvider: CategoriaProvider,
               private gastoProvider: GastoProvider) {
-    this.categorias = this.categoriaProvider.getAll();
+    this.categorias = this.categoriaProvider.getAllCategotiasViewValues();
     this.despesa = this.navParams.data.despesa || {};
     this.createForm();
   }
@@ -52,7 +53,8 @@ export class DespesaEditPage implements AfterViewInit {
       valor: [this.despesa.valor, Validators.required],
       local_compra: [this.despesa.local_compra],
       data_compra: [this.despesa.data_compra, Validators.required],
-      num_parcela: [this.despesa.num_parcela, Validators.required]
+      num_parcela: [this.despesa.num_parcela, Validators.required],
+      id_categoria: [this.despesa.id_categoria, Validators.required]
     });
   }
 
@@ -103,9 +105,5 @@ export class DespesaEditPage implements AfterViewInit {
 
   private updateBtnImageNF() {
     document.getElementById("btnImageNF").hidden = false;
-  }
-
-  teste() {
-    this.gastoProvider.getAll();
   }
 }

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 //Provider
 import { DespesaProvider } from '../../../providers/despesa/despesa';
 import { GastoProvider } from '../../../providers/gasto/gasto';
+import { CategoriaProvider } from '../../../providers/categoria/categoria';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -22,13 +23,35 @@ export class DespesaListPage {
               public navParams: NavParams,
               private provider: DespesaProvider,
               private toast: ToastController,
-              private gastoProvider: GastoProvider) {
+              private gastoProvider: GastoProvider,
+              private categoriaProvider: CategoriaProvider,
+              private alertCtrl: AlertController) {
     this.showSearchbar = false;
     this.despesas = this.provider.getAll();
   }
 
   newDespesa() {
-    this.navCtrl.push('DespesaEditPage');
+    if (this.categoriaProvider.getAllCategotiasViewValues().length > 0) {
+      this.navCtrl.push('DespesaEditPage');
+    } else {
+      let alert = this.alertCtrl.create({
+        title: 'Atenção',
+        subTitle: 'Para criar uma despesa é necessário cadastrar ao menos uma categoria de despesa. Exemplos de categoria:<br> - Veículo<br> - Casa',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel'
+          },
+          {
+            text: 'Ir Para Cadastro de Categoria',
+            handler: () => {
+              this.navCtrl.push('CategoriaEditPage');
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
   }
 
   editDespesa(despesa: any) {

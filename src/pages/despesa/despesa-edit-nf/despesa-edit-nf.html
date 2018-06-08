@@ -15,8 +15,15 @@
       <button ion-button block color="dark" (click)="escolherFoto()">Escolher Foto</button>
     </ion-item>
 
-    <!-- BOTÃO SALVAR -->
-    <div>
-      <button ion-button block color="color-default-system" type="submit" (click)="onSubmit()">Salvar</button>
-    </div>
+    <ion-fab bottom right>
+      <button ion-fab mini color="color-default-system"><ion-icon name="arrow-dropup"></ion-icon></button>
+      <ion-fab-list side="top">
+        <button ion-fab mini color="secondary" type="submit" (click)="onSubmit()">
+            <ion-icon name="bookmark"></ion-icon>
+        </button>
+        <!--<button ion-fab mini color="danger" [disabled]="!despesa" (click)="removeDespesa()">
+          <ion-icon name="trash"></ion-icon>
+        </button>-->
+      </ion-fab-list>
+    </ion-fab>
 </ion-content>

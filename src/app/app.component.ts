@@ -24,6 +24,7 @@ export class MyApp {
   rootPage: any;
   public pages: Array<{ titulo: string, component: any, icon: string }>;
   isGeralPage = false;
+  private possuiCategoriaCadastrada: boolean = false;
 
   constructor(platform: Platform, 
               statusBar: StatusBar, 
@@ -56,7 +57,7 @@ export class MyApp {
   }
 
   goToPage(page){
-    if ("sair" === page) {
+    if ('sair' === page) {
       this.signOut();
     } else {
       this.nav.setRoot(page);

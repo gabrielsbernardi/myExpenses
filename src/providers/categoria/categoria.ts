@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthService } from '../auth/auth-service';
 
+import * as firebase from 'firebase';
+import { categoriaView } from './categoria-view-values';
+
 /**
  * Gabriel Bernardi e Matheus Waltrich
  */
@@ -24,6 +27,17 @@ export class CategoriaProvider {
           ...c.payload.val()
         }));
       });
+  }
+
+  getAllCategotiasViewValues() {
+    var categorias: Array<categoriaView> = [];
+    firebase.database().ref(this.PATH).on("child_added", function(c) {
+      var categoria = new categoriaView();
+      categoria.key = c.key;
+      categoria.tipo = c.val().tipo;
+      categorias.push(categoria);
+    });
+    return categorias;
   }
 
   get(key: string) {
