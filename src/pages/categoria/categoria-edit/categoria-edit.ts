@@ -17,6 +17,7 @@ export class CategoriaEditPage {
   title: string;
   form: FormGroup;
   categoria: any;
+  exibirFabBtnOptions: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -26,6 +27,7 @@ export class CategoriaEditPage {
     this.categoria = this.navParams.data.categoria || {};
     this.createForm();
     this.setupPageTitle();
+    this.exibirFabBtnOptions = this.categoria.key;
   }
 
   private setupPageTitle() {

@@ -14,10 +14,10 @@ import { CreditoProvider } from '../../../providers/credito/credito';
   templateUrl: 'credito-edit.html',
 })
 export class CreditoEditPage {
-
   title: string;
   form: FormGroup;
   credito: any;
+  exibirFabBtnOptions: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -27,6 +27,7 @@ export class CreditoEditPage {
     this.credito = this.navParams.data.credito || {};
     this.createForm();
     this.setupPageTitle();
+    this.exibirFabBtnOptions = this.credito.key;
   }
 
   private setupPageTitle() {

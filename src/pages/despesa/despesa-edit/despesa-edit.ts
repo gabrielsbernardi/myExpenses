@@ -23,6 +23,7 @@ export class DespesaEditPage implements AfterViewInit {
   form: FormGroup;
   despesa: any;
   categorias: Array<categoriaView> = [];
+  exibirFabBtnOptions: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -34,6 +35,7 @@ export class DespesaEditPage implements AfterViewInit {
     this.categorias = this.categoriaProvider.getAllCategotiasViewValues();
     this.despesa = this.navParams.data.despesa || {};
     this.createForm();
+    this.exibirFabBtnOptions = this.despesa.key;
   }
 
   ngAfterViewInit() {
@@ -65,6 +67,7 @@ export class DespesaEditPage implements AfterViewInit {
           if (!this.form.value.key) {
             this.form.value.key = result;
             this.updateBtnImageNF();
+            this.exibirFabBtnOptions = true;
           } else {
             this.gastoProvider.remove(this.despesa.key);
           }
@@ -106,4 +109,5 @@ export class DespesaEditPage implements AfterViewInit {
   private updateBtnImageNF() {
     document.getElementById("btnImageNF").hidden = false;
   }
+  
 }

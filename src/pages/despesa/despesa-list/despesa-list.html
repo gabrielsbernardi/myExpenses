@@ -27,8 +27,14 @@
   <ion-list>
     <ion-item-sliding *ngFor="let despesa of despesas | async | despesaSearch : dsc">
       <ion-item>
-        <h1>{{ despesa.dsc }}</h1>
-        <p>{{ despesa.valor }}</p>
+        <div>
+          <div class="dsc-despesa-line">
+            <h2>{{ despesa.dsc }}</h2>
+          </div>
+          <div>
+            <h2>R$ {{ despesa.valor }}</h2>
+          </div>
+        </div>
       </ion-item>
       <ion-item-options side="left">
         <button ion-button color="secondary" (click)="editDespesa(despesa)">

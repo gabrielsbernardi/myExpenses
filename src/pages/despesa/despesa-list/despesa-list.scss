@@ -1,3 +1,9 @@
 page-despesa-list {
+    ion-label {
+        display: inherit;
+    }
 
+    .dsc-despesa-line {
+        width: 70%;
+    }
 }
