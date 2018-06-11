@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import chartJs from 'chart.js';
+import { GeralProvider } from '../../providers/geral/geral';
+import { GraficoPieView } from '../../providers/geral/grafico-pie-view-values';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -14,7 +16,14 @@ export class GeralPage {
   @ViewChild('pieCanvas') pieCanvas: any;
   @ViewChild('lineCanvas') lineCanvas: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private pieValues: Array<GraficoPieView> = [];
+  private cores: Array<string> = [];
+
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              private provider: GeralProvider) {
+    this.popularCores();
+    this.pieValues = this.provider.getPieValues();
   }
 
   ngAfterViewInit() {
@@ -33,11 +42,23 @@ export class GeralPage {
   }
 
   getPieCanvas() {
+    var labels = [];
+    var datas = [];
+    var backgroundColors = [];
+
+    var cor = 0;
+    this.pieValues.forEach(value => { 
+      labels.push(value.tipo_categoria);
+      datas.push(value.valor_total_gastos);
+      backgroundColors.push(this.cores[cor]);
+      cor++;
+    })
+
     const data = {
-      labels: ['Vermelho', 'Azul', 'Amarelo'],
+      labels: labels,
       datasets: [{
-        data: [300, 75, 224],
-        backgroundColor: ['rgb(200, 6, 0)', 'rgb(36, 0, 255)', 'rgb(242, 255, 0)']
+        data: datas,
+        backgroundColor: backgroundColors
       }]
     }
     return this.getChart(this.pieCanvas.nativeElement, 'pie', data);
@@ -74,5 +95,25 @@ export class GeralPage {
     };
 
     return this.getChart(this.lineCanvas.nativeElement, 'line', data);
+  }
+
+  private popularCores() {
+    this.cores.push("#16A085");
+    this.cores.push("#F39C12");
+    this.cores.push("#27AE60");
+    this.cores.push("#D35400");
+    this.cores.push("#2980B9");
+    this.cores.push("#C0392B");
+    this.cores.push("#2C3E50");
+    this.cores.push("#7F8C8D");
+    this.cores.push("#0925C6");
+    this.cores.push("#095BD0");
+    this.cores.push("#017DB9");
+    this.cores.push("#09C3D0");
+    this.cores.push("#09C69D");
+  }
+
+  private getCor() {
+    return this.cores[Math.floor(Math.random() * (12 - 0 + 1)) + 0];
   }
 }

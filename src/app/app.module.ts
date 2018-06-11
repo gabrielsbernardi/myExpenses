@@ -21,6 +21,7 @@ import { CreditoProvider } from '../providers/credito/credito';
 import { CategoriaSearchPipe } from '../pipes/categoria-search/categoria-search';
 import { DespesaSearchPipe } from '../pipes/despesa-search/despesa-search';
 import { CreditoSearchPipe } from '../pipes/credito-search/credito-search';
+import { DecimalPipe } from '@angular/common';
 
 //Pages
 import { MyApp } from './app.component';
@@ -33,6 +34,7 @@ import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
 import { CreditoListPage } from '../pages/credito/credito-list/credito-list';
 import { GastoProvider } from '../providers/gasto/gasto';
 import { GastoListPage } from '../pages/gasto/gasto-list/gasto-list';
+import { GeralProvider } from '../providers/geral/geral';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -86,7 +88,9 @@ export const firebaseConfig = {
     DespesaProvider,
     ImagePicker,
     CreditoProvider,
-    GastoProvider
+    GastoProvider,
+    GeralProvider,
+    DecimalPipe
   ]
 })
 export class AppModule {}
