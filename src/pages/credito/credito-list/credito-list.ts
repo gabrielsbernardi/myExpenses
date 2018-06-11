@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 //Provider
 import { CreditoProvider } from '../../../providers/credito/credito';
+import { GastoProvider } from '../../../providers/gasto/gasto';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -21,7 +22,8 @@ export class CreditoListPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: CreditoProvider,
-              private toast: ToastController) {
+              private toast: ToastController,
+              private gastoProvider: GastoProvider) {
     this.showSearchbar = false;
     this.creditos = this.provider.getAll();
   }
@@ -37,6 +39,7 @@ export class CreditoListPage {
   removeCredito(credito: any) {
     this.provider.remove(credito.key)
       .then(() => {
+        this.gastoProvider.removeCredito(credito.key);
         this.showMessage('Credito removido com sucesso')
       })
       .catch((e) => {

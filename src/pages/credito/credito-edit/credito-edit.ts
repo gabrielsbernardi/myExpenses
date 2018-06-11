@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 //Provider
 import { CreditoProvider } from '../../../providers/credito/credito';
+import { GastoProvider } from '../../../providers/gasto/gasto';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -23,7 +24,8 @@ export class CreditoEditPage {
               public navParams: NavParams,
               private formBuilder: FormBuilder,
               private provider: CreditoProvider,
-              private toast: ToastController) {
+              private toast: ToastController,
+              private gastoProvider: GastoProvider) {
     this.credito = this.navParams.data.credito || {};
     this.createForm();
     this.setupPageTitle();
@@ -47,7 +49,13 @@ export class CreditoEditPage {
   onSubmit() {
     if (this.form.valid) {
       this.provider.save(this.form.value)
-        .then(() => {
+        .then((result: any) => {
+          if (!this.form.value.key) {
+            this.form.value.key = result;
+          } else {
+            this.gastoProvider.removeCredito(this.credito.key);
+          }
+          this.gastoProvider.saveCredito(this.form.value);
           this.showMessage('Crédito salvo com sucesso.');
           this.navCtrl.pop();
         })
@@ -59,8 +67,10 @@ export class CreditoEditPage {
   }
 
   removeCredito() {
+    var key = this.form.value.key;
     this.provider.remove(this.credito.key)
       .then(() => {
+        this.gastoProvider.removeCredito(key);
         this.showMessage('Crédito removido com sucesso');
         this.navCtrl.pop();
       })
@@ -73,5 +83,4 @@ export class CreditoEditPage {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
-
 }

@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthService } from '../auth/auth-service';
+import * as firebase from 'firebase';
+import { CreditoView } from './credito-view-values';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -36,6 +38,20 @@ export class CreditoProvider {
       });
   }
 
+  getCreditoViewValues(idDespesa: string) {
+    var credito;
+    firebase.database().ref(this.PATH).on("child_added", function(c) {
+      if (c.key == idDespesa) {
+        credito = new CreditoView();
+        credito.dsc = c.val().dsc;
+        credito.data = c.val().data_inicial_recebimento;
+        credito.valor = c.val().valor;
+        return credito;
+      }
+    });
+    return credito;
+  }
+
   save(credito: any) {
     return new Promise((resolve, reject) => {
       if (credito.key) {
@@ -44,7 +60,7 @@ export class CreditoProvider {
                                  valor: credito.valor,
                                  data_inicial_recebimento: credito.data_inicial_recebimento,
                                  num_parcela: credito.num_parcela})
-          .then(() => resolve())
+          .then((result: any) => resolve(credito.key))
           .catch((e) => reject(e));
       } else {
         this.db.list(this.PATH)
@@ -52,7 +68,7 @@ export class CreditoProvider {
                   valor: credito.valor,
                   data_inicial_recebimento: credito.data_inicial_recebimento,
                   num_parcela: credito.num_parcela })
-          .then(() => resolve());
+          .then((result: any) => resolve(result.key))
       }
     });
   }

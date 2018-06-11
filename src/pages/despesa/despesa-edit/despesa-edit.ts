@@ -69,9 +69,9 @@ export class DespesaEditPage implements AfterViewInit {
             this.updateBtnImageNF();
             this.exibirFabBtnOptions = true;
           } else {
-            this.gastoProvider.remove(this.despesa.key);
+            this.gastoProvider.removeDespesa(this.despesa.key);
           }
-          this.gastoProvider.save(this.form.value);
+          this.gastoProvider.saveDespesa(this.form.value);
           this.showMessage('Despesa salva com sucesso.')
         })
         .catch((e) => {
@@ -88,7 +88,7 @@ export class DespesaEditPage implements AfterViewInit {
     var key = this.form.value.key;
     this.provider.remove(this.despesa)
       .then(() => {
-        this.gastoProvider.remove(key);
+        this.gastoProvider.removeDespesa(key);
         this.showMessage('Despesa removida com sucesso');
         this.navCtrl.pop();
       })

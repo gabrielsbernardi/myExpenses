@@ -35,26 +35,44 @@ export class GastoProvider {
 
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
-
+    
+    //var parcela = 0;
     refPrincipal.on("child_added", function(pathData) {
+      //parcela++;
       gastoView = new GastoView();
       gastoView.data = self.formatDataApresentacao(pathData.key);
 
-      var path = pathPrincipal + pathData.key + '/';
+      var path = pathPrincipal + pathData.key + '/despesas/';
       var ref = firebase.database().ref(path);
-      var valor = 0;
+      var valorGasto = 0;
 
       ref.on("child_added", function(gasto) {
-        valor += parseFloat(gasto.val().valor);
+        valorGasto += parseFloat(gasto.val().valor);
+        //var pos_parcela = '_parcela:@' + parcela;
         if (typeof gastoView.ids_despesas !== 'undefined') {
-          gastoView.ids_despesas += self.separator + gasto.val().id_despesa;
+          gastoView.ids_despesas += self.separator + gasto.val().id_despesa// + pos_parcela;
         } else {
-          gastoView.ids_despesas = gasto.val().id_despesa;
+          gastoView.ids_despesas = gasto.val().id_despesa// + pos_parcela;
         }
       });
 
-      gastoView.key = '123'
-      gastoView.valor = valor;
+      var pathCredito = pathPrincipal + pathData.key + '/creditos/';
+      var ref = firebase.database().ref(pathCredito);
+      var valorCredito = 0;
+
+      ref.on("child_added", function(credito) {
+        valorCredito += parseFloat(credito.val().valor);
+        //var pos_parcela = '_parcela:@' + parcela;
+        if (typeof gastoView.ids_creditos !== 'undefined') {
+          gastoView.ids_creditos += self.separator + credito.val().id_credito// + pos_parcela;
+        } else {
+          gastoView.ids_creditos = credito.val().id_credito// + pos_parcela;
+        }
+      });
+
+      gastoView.valorGasto = valorGasto;
+      gastoView.valorCredito = valorCredito;
+      gastoView.valor = valorCredito - valorGasto;
 
       self.arrayGastos.push(gastoView);
     });
@@ -114,7 +132,7 @@ export class GastoProvider {
       });
   }
 
-  save(despesa: any) {
+  saveDespesa(despesa: any) {
     return new Promise((resolve, reject) => {
       var anoMesCompra = (despesa.data_compra).substring(0, 7);
       var numParcela = parseInt(despesa.num_parcela);
@@ -137,13 +155,13 @@ export class GastoProvider {
             gasto.data = this.getFormatarDataParcela(anoParcela, mesParcela);
           }
 
-          this.db.list(this.PATH + gasto.data + '/')
+          this.db.list(this.PATH + gasto.data + '/despesas/')
           .push({ id_despesa: despesa.key,
                   valor: gasto.valor,
                   data: gasto.data });
         }
       } else {
-        this.db.list(this.PATH + anoMesCompra + '/')
+        this.db.list(this.PATH + anoMesCompra + '/despesas/')
           .push({ id_despesa: despesa.key,
                   valor: despesa.valor,
                   data: anoMesCompra })
@@ -152,12 +170,12 @@ export class GastoProvider {
     });
   }
 
-  remove(idDespesa: string) {
+  removeDespesa(idDespesa: string) {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
     var self = this;
     refPrincipal.on("child_added", function(pathData) {
-      var path = pathPrincipal + pathData.key + '/';
+      var path = pathPrincipal + pathData.key + '/despesas/';
       var ref = firebase.database().ref(path);
       ref.orderByChild('id_despesa').equalTo(idDespesa).on("child_added", function(gasto) {
         self.db.list(path).remove(gasto.key);
@@ -184,5 +202,56 @@ export class GastoProvider {
       return anoParcela + 1;
     }
     return anoParcela;
+  }
+
+  saveCredito(credito: any) {
+    return new Promise((resolve, reject) => {
+      var anoMesRecebimento = (credito.data_inicial_recebimento).substring(0, 7);
+      var numParcela = parseInt(credito.num_parcela);
+      if (numParcela > 1) {
+        var valor = (parseFloat(credito.valor) / numParcela).toFixed(2);
+
+        var gasto;
+        var anoParcela = parseInt(anoMesRecebimento.substring(0, 4));
+        var mesParcela = parseInt(anoMesRecebimento.substring(5, 7));
+        for (var i = 0; i < numParcela; i++) {
+          gasto = new Gasto();
+          gasto.valor = valor;
+          
+          if (i == 0) {
+            gasto.data = anoMesRecebimento;
+          } else {
+            var mesAux = mesParcela;
+            mesParcela = this.getMesProximaParcela(mesParcela);
+            anoParcela = this.getAnoProximaParcela(anoParcela, mesAux > mesParcela);
+            gasto.data = this.getFormatarDataParcela(anoParcela, mesParcela);
+          }
+
+          this.db.list(this.PATH + gasto.data + '/creditos/')
+          .push({ id_credito: credito.key,
+                  valor: gasto.valor,
+                  data: gasto.data });
+        }
+      } else {
+        this.db.list(this.PATH + anoMesRecebimento + '/creditos/')
+          .push({ id_credito: credito.key,
+                  valor: credito.valor,
+                  data: anoMesRecebimento })
+          .then(() =>resolve());
+      }
+    });
+  }
+
+  removeCredito(idCredito: string) {
+    var pathPrincipal = this.PATH
+    var refPrincipal = firebase.database().ref(pathPrincipal);
+    var self = this;
+    refPrincipal.on("child_added", function(pathData) {
+      var path = pathPrincipal + pathData.key + '/creditos/';
+      var ref = firebase.database().ref(path);
+      ref.orderByChild('id_credito').equalTo(idCredito).on("child_added", function(gasto) {
+        self.db.list(path).remove(gasto.key);
+      });
+    });
   }
 }

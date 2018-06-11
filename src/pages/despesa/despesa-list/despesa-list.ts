@@ -61,7 +61,7 @@ export class DespesaListPage {
   removeDespesa(despesa: any) {
     this.provider.remove(despesa)
       .then(() => {
-        this.gastoProvider.remove(despesa.key);
+        this.gastoProvider.removeDespesa(despesa.key);
         this.showMessage('Despesa removida com sucesso')
       })
       .catch((e) => {

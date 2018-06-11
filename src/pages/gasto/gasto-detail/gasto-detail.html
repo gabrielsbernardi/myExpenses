@@ -9,12 +9,43 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item-sliding *ngFor="let despesa of despesas">
-      <ion-item>
-        <h1>{{ despesa.dsc }}</h1>
-        <p>{{ despesa.valor }}</p>
+
+  <div padding>
+    <ion-segment [(ngModel)]="dadosMesSelect">
+      <ion-segment-button value="gasto">
+        Gastos
+      </ion-segment-button>
+      <ion-segment-button value="credito">
+        Créditos
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="dadosMesSelect">
+    <ion-list *ngSwitchCase="'gasto'">
+      <ion-item-sliding *ngFor="let despesa of despesas">
+        <ion-item>
+          <h1>{{ despesa.dsc }}</h1>
+          <p>{{ despesa.valor }}</p>
+        </ion-item>
+      </ion-item-sliding>
+      <ion-item *ngIf="despesas.length <= 0 || !despesas">
+        Não possui despesas neste mês.
       </ion-item>
-    </ion-item-sliding>
-  </ion-list>
+    </ion-list>
+
+
+    <ion-list *ngSwitchCase="'credito'">
+      <ion-item-sliding *ngFor="let credito of creditos">
+        <ion-item>
+          <h1>{{ credito.dsc }}</h1>
+          <p>{{ credito.valor }}</p>
+        </ion-item>
+      </ion-item-sliding>
+      <ion-item *ngIf="creditos.length <= 0 || !creditos">
+        Não possui créditos neste mês.
+      </ion-item>
+    </ion-list>
+  </div>
+
 </ion-content>
