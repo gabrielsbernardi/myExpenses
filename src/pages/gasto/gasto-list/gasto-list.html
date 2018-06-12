@@ -6,7 +6,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     
-    <ion-title>Gastos</ion-title>
+    <ion-title>Controle Financeiro</ion-title>
 
     <!--<ion-buttons end>
       <button ion-button icon-only (click)="toggleSearchbar()">
@@ -25,7 +25,7 @@
     <ion-item-sliding *ngFor="let gasto of gastos">
       <ion-item>
         <h1>{{ gasto.data }}</h1>
-        <p>{{ gasto.valor }}</p>
+        <p class="negativo" [ngClass]="{'positivo' : gasto.valor > 0}">R$ {{ gasto.valor }}</p>
       </ion-item>
       <ion-item-options side="left">
         <button ion-button color="secondary" (click)="detailGasto(gasto)">

@@ -10,6 +10,17 @@
 
 <ion-content padding>
 
+  <div style="margin-top: 15px;">
+    <div style="float: right; margin-bottom: -12px;"> 
+      <p>Créditos: R$ {{ gasto.valorCredito }}</p>
+      <p>Despesas: R$ {{ gasto.valorGasto }}</p>
+    </div>
+    <ion-item-divider style="margin-top: -17px;"></ion-item-divider>
+    <div style="margin-top: 10px; float: right">
+      <h1 class="negativo" [ngClass]="{'positivo' : gasto.valor > 0}">Total: R$ {{ gasto.valor }}</h1>
+    </div>
+  </div>
+
   <div padding>
     <ion-segment [(ngModel)]="dadosMesSelect">
       <ion-segment-button value="gasto">
@@ -25,8 +36,8 @@
     <ion-list *ngSwitchCase="'gasto'">
       <ion-item-sliding *ngFor="let despesa of despesas">
         <ion-item>
-          <h1>{{ despesa.dsc }}</h1>
-          <p>{{ despesa.valor }}</p>
+          <h2>{{ despesa.dsc }}</h2>
+          <h2>{{ despesa.valor }}</h2>
         </ion-item>
       </ion-item-sliding>
       <ion-item *ngIf="despesas.length <= 0 || !despesas">
@@ -38,8 +49,8 @@
     <ion-list *ngSwitchCase="'credito'">
       <ion-item-sliding *ngFor="let credito of creditos">
         <ion-item>
-          <h1>{{ credito.dsc }}</h1>
-          <p>{{ credito.valor }}</p>
+          <h2>{{ credito.dsc }}</h2>
+          <h2>{{ credito.valor }}</h2>
         </ion-item>
       </ion-item-sliding>
       <ion-item *ngIf="creditos.length <= 0 || !creditos">

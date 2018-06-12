@@ -40,22 +40,24 @@ export class GastoDetailPage {
   }
 
   private carregarDespesas() {
-    var ids = this.gasto.ids_despesas.split('_@_');
-    ids.forEach(id => {
-      var d = this.despesaProvider.getDespesaViewValues(id);
-      if (typeof d !== 'undefined') {
-        this.despesas.push(d);
-      }
-    });
+    if (this.gasto.ids_despesas) {
+      var ids = this.gasto.ids_despesas.split('_@_');
+      ids.forEach(id => {
+        var d = this.despesaProvider.getDespesaViewValues(id);
+        if (typeof d !== 'undefined') {
+          this.despesas.push(d);
+        }
+      });
+    }
   }
 
   private carregarCreditos() {
     if (this.gasto.ids_creditos) {
       var ids = this.gasto.ids_creditos.split('_@_');
       ids.forEach(id => {
-        var d = this.creditoProvider.getCreditoViewValues(id);
-        if (typeof d !== 'undefined') {
-          this.creditos.push(d);
+        var c = this.creditoProvider.getCreditoViewValues(id);
+        if (typeof c !== 'undefined') {
+          this.creditos.push(c);
         }
       });
     }

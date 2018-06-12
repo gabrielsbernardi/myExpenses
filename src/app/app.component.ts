@@ -42,11 +42,11 @@ export class MyApp {
     this.isGeralPage = this.rootPage == GeralPage;
     
     this.pages = [
-      { titulo: 'Informações Gerais', component: GeralPage, icon: 'home'},
+      { titulo: 'Informações Gerais', component: GeralPage, icon: 'md-pie'},
       { titulo: 'Categoria', component: CategoriaListPage, icon: 'md-list-box'},
       { titulo: 'Despesa', component: DespesaListPage, icon: 'md-list-box'},
-      { titulo: 'Crédito', component: CreditoListPage, icon: 'md-list-box'},
-      { titulo: 'Gasto', component: GastoListPage, icon: 'md-list-box'},
+      { titulo: 'Crédito', component: CreditoListPage, icon: 'md-card'},
+      { titulo: 'Controle Financeiro', component: GastoListPage, icon: 'md-list-box'},
       { titulo: 'Sair', component: 'sair', icon: 'md-log-out'}
     ];
 

@@ -5,6 +5,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthService } from '../auth/auth-service';
 import * as firebase from 'firebase';
 import { CreditoView } from './credito-view-values';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -14,7 +15,8 @@ export class CreditoProvider {
   private PATH = 'creditos/' + this.auth.userLogged().uid + "/";
 
   constructor(private db: AngularFireDatabase,
-              private auth: AuthService) { 
+              private auth: AuthService,
+              private decimalPipe: DecimalPipe) { 
   }
 
   getAll() {
@@ -39,13 +41,14 @@ export class CreditoProvider {
   }
 
   getCreditoViewValues(idDespesa: string) {
+    var self = this;
     var credito;
     firebase.database().ref(this.PATH).on("child_added", function(c) {
       if (c.key == idDespesa) {
         credito = new CreditoView();
         credito.dsc = c.val().dsc;
         credito.data = c.val().data_inicial_recebimento;
-        credito.valor = c.val().valor;
+        credito.valor = self.decimalPipe.transform((c.val().valor / c.val().num_parcela), '1.2-2');
         return credito;
       }
     });

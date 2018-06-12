@@ -36,9 +36,7 @@ export class GastoProvider {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
     
-    //var parcela = 0;
     refPrincipal.on("child_added", function(pathData) {
-      //parcela++;
       gastoView = new GastoView();
       gastoView.data = self.formatDataApresentacao(pathData.key);
 
@@ -48,11 +46,10 @@ export class GastoProvider {
 
       ref.on("child_added", function(gasto) {
         valorGasto += parseFloat(gasto.val().valor);
-        //var pos_parcela = '_parcela:@' + parcela;
         if (typeof gastoView.ids_despesas !== 'undefined') {
-          gastoView.ids_despesas += self.separator + gasto.val().id_despesa// + pos_parcela;
+          gastoView.ids_despesas += self.separator + gasto.val().id_despesa;
         } else {
-          gastoView.ids_despesas = gasto.val().id_despesa// + pos_parcela;
+          gastoView.ids_despesas = gasto.val().id_despesa;
         }
       });
 
@@ -62,11 +59,10 @@ export class GastoProvider {
 
       ref.on("child_added", function(credito) {
         valorCredito += parseFloat(credito.val().valor);
-        //var pos_parcela = '_parcela:@' + parcela;
         if (typeof gastoView.ids_creditos !== 'undefined') {
-          gastoView.ids_creditos += self.separator + credito.val().id_credito// + pos_parcela;
+          gastoView.ids_creditos += self.separator + credito.val().id_credito;
         } else {
-          gastoView.ids_creditos = credito.val().id_credito// + pos_parcela;
+          gastoView.ids_creditos = credito.val().id_credito;
         }
       });
 

@@ -7,6 +7,7 @@ import { FirebaseApp } from 'angularfire2';
 import * as firebase from 'firebase';
 
 import { DespesaView } from './despesa-view-values';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -17,7 +18,8 @@ export class DespesaProvider {
 
   constructor(private db: AngularFireDatabase,
               private auth: AuthService,
-              private fb: FirebaseApp) { 
+              private fb: FirebaseApp,
+              private decimalPipe: DecimalPipe) { 
   }
 
   getAll() {
@@ -32,13 +34,14 @@ export class DespesaProvider {
   }
 
   getDespesaViewValues(idDespesa: string) {
+    var self = this;
     var despesa;
     firebase.database().ref(this.PATH).on("child_added", function(d) {
       if (d.key == idDespesa) {
         despesa = new DespesaView();
         despesa.dsc = d.val().dsc;
         despesa.data = d.val().data_compra;
-        despesa.valor = d.val().valor;
+        despesa.valor = self.decimalPipe.transform((d.val().valor / d.val().num_parcela), '1.2-2');
         return despesa;
       }
     });
