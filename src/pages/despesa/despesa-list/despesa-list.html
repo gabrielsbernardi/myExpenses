@@ -25,8 +25,8 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let despesa of despesas | async | despesaSearch : dsc">
-      <ion-item>
+    <ion-item-sliding #slidingItem *ngFor="let despesa of despesas | async | despesaSearch : dsc">
+      <ion-item #item (click)="open(slidingItem, item)">
         <div>
           <div class="dsc-despesa-line">
             <h2>{{ despesa.dsc }}</h2>

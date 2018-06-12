@@ -25,8 +25,8 @@
   <ion-content padding>
   
     <ion-list>
-      <ion-item-sliding *ngFor="let credito of creditos | async | creditoSearch : dsc">
-        <ion-item>
+      <ion-item-sliding #slidingItem *ngFor="let credito of creditos | async | creditoSearch : dsc">
+        <ion-item #item (click)="open(slidingItem, item)">
           <h1>{{ credito.dsc }}</h1>
           <p>{{ credito.valor }}</p>
         </ion-item>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ItemSliding, Item } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 //Provider
@@ -56,4 +56,10 @@ export class CreditoListPage {
     this.showSearchbar = !this.showSearchbar;
   }
 
+  public open(itemSlide: ItemSliding, item: Item) {
+    itemSlide.setElementClass("active-sliding", true);
+    itemSlide.setElementClass("active-slide", true);
+    itemSlide.setElementClass("active-options-left", true);
+    item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
+  }
 }

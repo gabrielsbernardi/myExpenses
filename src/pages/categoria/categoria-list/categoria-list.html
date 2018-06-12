@@ -25,8 +25,8 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let categoria of categorias | async | categoriaSearch : tipo">
-      <ion-item>
+    <ion-item-sliding #slidingItem *ngFor="let categoria of categorias | async | categoriaSearch : tipo">
+      <ion-item #item (click)="open(slidingItem, item)">
         <h1>{{ categoria.tipo }}</h1>
         <p>{{ categoria.dsc }}</p>
       </ion-item>

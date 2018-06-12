@@ -153,12 +153,14 @@ export class GastoProvider {
 
           this.db.list(this.PATH + gasto.data + '/despesas/')
           .push({ id_despesa: despesa.key,
+                  id_categoria: despesa.id_categoria,
                   valor: gasto.valor,
                   data: gasto.data });
         }
       } else {
         this.db.list(this.PATH + anoMesCompra + '/despesas/')
           .push({ id_despesa: despesa.key,
+                  id_categoria: despesa.id_categoria,
                   valor: despesa.valor,
                   data: anoMesCompra })
           .then(() =>resolve());

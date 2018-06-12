@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import chartJs from 'chart.js';
 import { GeralProvider } from '../../providers/geral/geral';
 import { GraficoPieView } from '../../providers/geral/grafico-pie-view-values';
+import { GraficoLineView } from '../../providers/geral/grafico-line-view-values';
+import { GeralView } from '../../providers/geral/geral-view-values';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -17,13 +19,18 @@ export class GeralPage {
   @ViewChild('lineCanvas') lineCanvas: any;
 
   private pieValues: Array<GraficoPieView> = [];
+  private lineValues: Array<GraficoLineView> = [];
+  private geralViewValues: GeralView;
   private cores: Array<string> = [];
+
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: GeralProvider) {
     this.popularCores();
+    this.geralViewValues = this.provider.getGeralViewValues();
     this.pieValues = this.provider.getPieValues();
+    this.lineValues = this.provider.getLineValues();
   }
 
   ngAfterViewInit() {
@@ -65,31 +72,41 @@ export class GeralPage {
   }
   
   getLineCanvas() {
+    var labels = [];
+    var dadosDespesas = [];
+    var dadosCreditos = [];
+
+    this.lineValues.forEach(value => { 
+      labels.push(value.label);
+      dadosDespesas.push(value.valor_despesas);
+      dadosCreditos.push(value.valor_creditos);
+    })
+
     const data = {
-      labels: ['JAN', 'FEV', 'MAR', 'ABR'],
+      labels: labels,
       datasets: [{
-        label: 'Meu Dataset',
+        label: 'Despesa',
         fill: false,
         lineTension: 0.1,
-        backgroundColor: 'rgb(0, 178, 255)',
-        borderColor: 'rgb(231, 205, 35)',
+        backgroundColor: this.cores[10],
+        borderColor: this.cores[10],
         borderCapStyle: 'butt',
         borderJoinStyle: 'miter',
         pointRadius: 1,
         pointHitRadius: 10,
-        data: [20, 15, 98, 4],
+        data: dadosDespesas,
         scanGaps: false
       }, {
-        label: 'Meu Dataset',
+        label: 'Crédito',
         fill: false,
         lineTension: 0.1,
-        backgroundColor: 'rgb(117, 0, 49)',
-        borderColor: 'rgb(51, 50, 46)',
+        backgroundColor: this.cores[11],
+        borderColor: this.cores[11],
         borderCapStyle: 'butt',
         borderJoinStyle: 'miter',
         pointRadius: 1,
         pointHitRadius: 10,
-        data: [29, 135, 13, 70],
+        data: dadosCreditos,
         scanGaps: false
       }]
     };

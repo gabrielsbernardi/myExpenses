@@ -22,17 +22,10 @@
   <!--<ion-searchbar [(ngModel)]="dsc" placeholder="Descrição" *ngIf="showSearchbar"></ion-searchbar>-->
 
   <ion-list>
-    <ion-item-sliding *ngFor="let gasto of gastos">
-      <ion-item>
-        <h1>{{ gasto.data }}</h1>
-        <p class="negativo" [ngClass]="{'positivo' : gasto.valor > 0}">R$ {{ gasto.valor }}</p>
-      </ion-item>
-      <ion-item-options side="left">
-        <button ion-button color="secondary" (click)="detailGasto(gasto)">
-          <ion-icon name="create"></ion-icon>
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
+    <ion-item *ngFor="let gasto of gastos" (click)="detailGasto(gasto)">
+      <h1>{{ gasto.data }}</h1>
+      <p class="negativo" [ngClass]="{'positivo' : gasto.valor > 0}">R$ {{ gasto.valor }}</p>
+    </ion-item>
   </ion-list>
   
 </ion-content>
