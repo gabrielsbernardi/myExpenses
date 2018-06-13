@@ -69,18 +69,27 @@ export class GeralProvider {
     paths.forEach(path => {
       var valorDespesa;
       firebase.database().ref(this.PATH_GASTO + path + '/despesas/').on("child_added", function(despesa) {
-        valorDespesa = self.decimalPipe.transform(despesa.val().valor, '1.2-2');
+        if (typeof valorDespesa == 'undefined') {
+          valorDespesa = parseFloat(despesa.val().valor);
+        } else {
+          valorDespesa += parseFloat(despesa.val().valor);
+        }
       });
 
       var valorCredito;
       firebase.database().ref(this.PATH_GASTO + path + '/creditos/').on("child_added", function(credito) {
-        valorCredito = self.decimalPipe.transform(credito.val().valor, '1.2-2');
+        if (typeof valorCredito == 'undefined') {
+          valorCredito = parseFloat(credito.val().valor);
+        } else {
+          valorCredito += parseFloat(credito.val().valor);
+        }
       });
 
       var graficoLineView = new GraficoLineView();
       graficoLineView.label = this.getDataExtenso(path);
-      graficoLineView.valor_despesas = (typeof valorDespesa === 'undefined' ? 0.0 : valorDespesa);
-      graficoLineView.valor_creditos = (typeof valorCredito === 'undefined' ? 0.0 : valorCredito);
+      
+      graficoLineView.valor_despesas = (typeof valorDespesa === 'undefined' ? 0.00 : parseFloat(this.decimalPipe.transform(valorDespesa, '1.2-2')));
+      graficoLineView.valor_creditos = (typeof valorCredito === 'undefined' ? 0.00 : parseFloat(this.decimalPipe.transform(valorCredito, '1.2-2')));
 
       self.lineValues.push(graficoLineView);
     })
@@ -184,7 +193,6 @@ export class GeralProvider {
   }
 
   getGeralViewValues() {
-    var self = this;
     var valorDespesa;
 
     var current = new Date();
@@ -193,19 +201,30 @@ export class GeralProvider {
     var path = current.getFullYear() + '-' + (mes.toString().length == 1 ? ('0' + mes) : mes);
 
     firebase.database().ref(this.PATH_GASTO + path + '/despesas/').on("child_added", function(despesa) {
-      valorDespesa = self.decimalPipe.transform(despesa.val().valor, '1.2-2');
+      if (typeof valorDespesa == 'undefined') {
+        valorDespesa = parseFloat(despesa.val().valor);
+      } else {
+        valorDespesa += parseFloat(despesa.val().valor);
+      }
     });
 
     var valorCredito;
     firebase.database().ref(this.PATH_GASTO + path + '/creditos/').on("child_added", function(credito) {
-      valorCredito = self.decimalPipe.transform(credito.val().valor, '1.2-2');
+      if (typeof valorCredito == 'undefined') {
+        valorCredito = parseFloat(credito.val().valor);
+      } else {
+        valorCredito += parseFloat(credito.val().valor);
+      }
     });
 
     var geral = new GeralView();
     geral.title = this.getDataExtenso(path);
-    geral.valor_despesas = (typeof valorDespesa === 'undefined' ? 0.0 : valorDespesa);
-    geral.valor_creditos = (typeof valorCredito === 'undefined' ? 0.0 : valorCredito);
-    geral.valor_total = this.decimalPipe.transform((geral.valor_creditos - geral.valor_despesas), '1.2-2');
+    geral.valor_despesas = (typeof valorDespesa === 'undefined' ? '0.00' : this.decimalPipe.transform(valorDespesa, '1.2-2'));
+    geral.valor_creditos = (typeof valorCredito === 'undefined' ? '0.00' : this.decimalPipe.transform(valorCredito, '1.2-2'));
+    geral.valor_total = this.decimalPipe.transform((parseFloat(geral.valor_creditos) - parseFloat(geral.valor_despesas)), '1.2-2');
+    if (geral.valor_total === '') {
+      geral.valor_total = '0.00';
+    }
 
     return geral;
   }
