@@ -13,3 +13,7 @@ ionic g pipe <pipe>
 -- Intalar Image Picker
 ionic cordova plugin add cordova-plugin-telerik-imagepicker
 npm install --save @ionic-native/image-picker
+
+-- Instalar câmera
+ionic cordova plugin add cordova-plugin-camera
+npm install --save @ionic-native/camera

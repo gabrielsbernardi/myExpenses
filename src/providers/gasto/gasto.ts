@@ -13,6 +13,7 @@ import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 
 import { DespesaProvider } from "../despesa/despesa"
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -25,7 +26,8 @@ export class GastoProvider {
 
   constructor(private db: AngularFireDatabase,
               private auth: AuthService,
-              private despesaProvider: DespesaProvider) { 
+              private despesaProvider: DespesaProvider,
+              private decimalPipe: DecimalPipe) { 
   }
 
   getAll() {
@@ -66,9 +68,9 @@ export class GastoProvider {
         }
       });
 
-      gastoView.valorGasto = valorGasto;
-      gastoView.valorCredito = valorCredito;
-      gastoView.valor = valorCredito - valorGasto;
+      gastoView.valorGasto = self.decimalPipe.transform(valorGasto, '1.2-2');
+      gastoView.valorCredito = self.decimalPipe.transform(valorCredito, '1.2-2');
+      gastoView.valor = self.decimalPipe.transform(valorCredito - valorGasto, '1.2-2');
 
       self.arrayGastos.push(gastoView);
     });
@@ -162,8 +164,7 @@ export class GastoProvider {
           .push({ id_despesa: despesa.key,
                   id_categoria: despesa.id_categoria,
                   valor: despesa.valor,
-                  data: anoMesCompra })
-          .then(() =>resolve());
+                  data: anoMesCompra });
       }
     });
   }
@@ -172,10 +173,10 @@ export class GastoProvider {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
     var self = this;
-    refPrincipal.on("child_added", function(pathData) {
+    refPrincipal.once("child_added", function(pathData) {
       var path = pathPrincipal + pathData.key + '/despesas/';
       var ref = firebase.database().ref(path);
-      ref.orderByChild('id_despesa').equalTo(idDespesa).on("child_added", function(gasto) {
+      ref.orderByChild('id_despesa').equalTo(idDespesa).once("child_added", function(gasto) {
         self.db.list(path).remove(gasto.key);
       });
     });
@@ -235,7 +236,7 @@ export class GastoProvider {
           .push({ id_credito: credito.key,
                   valor: credito.valor,
                   data: anoMesRecebimento })
-          .then(() =>resolve());
+          .then(() => resolve());
       }
     });
   }
@@ -244,10 +245,10 @@ export class GastoProvider {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
     var self = this;
-    refPrincipal.on("child_added", function(pathData) {
+    refPrincipal.once("child_added", function(pathData) {
       var path = pathPrincipal + pathData.key + '/creditos/';
       var ref = firebase.database().ref(path);
-      ref.orderByChild('id_credito').equalTo(idCredito).on("child_added", function(gasto) {
+      ref.orderByChild('id_credito').equalTo(idCredito).once("child_added", function(gasto) {
         self.db.list(path).remove(gasto.key);
       });
     });

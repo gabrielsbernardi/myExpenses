@@ -20,6 +20,10 @@ export class CreditoEditPage {
   credito: any;
   exibirFabBtnOptions: boolean = false;
 
+  private dataAntiga;
+  private numParcelasAntiga;
+  private valorAntigo;
+
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private formBuilder: FormBuilder,
@@ -27,6 +31,11 @@ export class CreditoEditPage {
               private toast: ToastController,
               private gastoProvider: GastoProvider) {
     this.credito = this.navParams.data.credito || {};
+    if (this.credito) {
+      this.dataAntiga = this.credito.data_inicial_recebimento;
+      this.numParcelasAntiga = this.credito.num_parcela;
+      this.valorAntigo = this.credito.valor;
+    }
     this.createForm();
     this.setupPageTitle();
     this.exibirFabBtnOptions = this.credito.key;
@@ -48,21 +57,38 @@ export class CreditoEditPage {
 
   onSubmit() {
     if (this.form.valid) {
+      var salvarGastos = false;
       this.provider.save(this.form.value)
         .then((result: any) => {
-          if (!this.form.value.key) {
+          if (!this.credito.key) {
             this.form.value.key = result;
-          } else {
-            this.gastoProvider.removeCredito(this.credito.key);
+            salvarGastos = true;
           }
-          this.gastoProvider.saveCredito(this.form.value);
+
+          this.credito = this.form.value;
           this.showMessage('Crédito salvo com sucesso.');
+        })
+        .then(() => {
+          if (salvarGastos) {
+            this.gastoProvider.saveCredito(this.form.value);
+          } else {
+            this.atualizarGastos();
+          }
           this.navCtrl.pop();
         })
         .catch((e) => {
           this.showMessage('Erro ao salvar o Crédito.');
           console.error(e);
         });
+    }
+  }
+
+  private atualizarGastos() {
+    if (this.credito.key && (this.dataAntiga != this.credito.data_inicial_recebimento 
+          || this.numParcelasAntiga != this.credito.num_parcela
+          || this.valorAntigo != this.credito.valor)) {
+        this.gastoProvider.removeCredito(this.credito.key);
+        this.gastoProvider.saveCredito(this.credito);
     }
   }
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms'
-import { ImagePicker } from '@ionic-native/image-picker';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 //Provider
 import { DespesaProvider } from '../../../providers/despesa/despesa';
@@ -26,7 +26,7 @@ export class DespesaEditNfPage {
               private formBuilder: FormBuilder,
               private provider: DespesaProvider,
               private toast: ToastController,
-              private imagePicker: ImagePicker) {
+              private camera: Camera) {
     this.despesa = this.navParams.data.despesa;
     this.imgPath = this.despesa.url || {};
     this.setupPageTitle();
@@ -36,60 +36,25 @@ export class DespesaEditNfPage {
     this.title = 'Comprovante: ' + this.despesa.dsc;
   }
 
-  escolherFoto() {
-    this.imagePicker.hasReadPermission()
-      .then(hasPermission => {
-        if (hasPermission) {
-          this.pegarImagem();
-        } else {
-          this.solicitarPermissao();
-        }
-      })
-      .catch((error) => {
-        console.error('Erro ao verificar permissão', error);
-      })
-  }
+  takePhoto() {
+    try {
+      const options: CameraOptions = {
+        quality: 100,
+        targetHeight: 600,
+        targetWidth: 600,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        correctOrientation: true
+      }
 
-  solicitarPermissao() {
-    this.imagePicker.requestReadPermission()
-      .then(hasPermission => {
-        if (hasPermission) {
-          this.pegarImagem();
-        } else {
-          console.error('Permissão negada.');
-        }
-      })
-      .catch((error) => {
-        console.log('Erro ao solicitar permissão', error);
-      })
-  }
+      const result = this.camera.getPicture(options);
+      const image = 'data:image/jpeg;base64,${result}';
 
-  pegarImagem() {
-    this.imagePicker.getPictures({
-      maximumImagesCount: 1,
-      outputType: 1 //base64
-    })
-      .then(results => {
-        if (results.length > 0) {
-          this.imgPath = 'data:image/png;base64,' + results[0];
-          this.fileToUpload = results[0];
-        } else {
-          this.imgPath = '';
-          this.fileToUpload = null;
-          console.error('Permissão negada.');
-        }
-      })
-      .catch((error) => {
-        console.log('Erro ao recuperar a imagem', error);
-      })
-  }
-
-  onSubmit() {
-      this.provider.uploadAndSave({
-        key: this.despesa.key,
-        fileToUpload: this.fileToUpload
-      });
-      this.navCtrl.pop();
+      this.provider.savePhoto(this.despesa, image);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   private showMessage(message: string) {

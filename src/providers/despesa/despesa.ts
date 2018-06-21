@@ -84,46 +84,11 @@ export class DespesaProvider {
   }
 
   remove(item: any) {
-    return this.db.list(this.PATH).remove(item.key)
-      .then(() => {
-        if (item.fullPath) {
-          this.removeFile(item.fullPath);
-        }
-      });
+    return this.db.list(this.PATH).remove(item.key);
   }
 
-  public uploadAndSave(item: any) {
-    let despesa = { key: item.key, url: '', fullPath: ''}
-
-    let storageRef = this.fb.storage().ref();
-    let basePath = this.PATH;
-    despesa.fullPath = basePath + despesa.key + '.png';
-
-    let uploadTask = storageRef.child(despesa.fullPath).putString(item.fileToUpload, 'base64');
-
-    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
-      (snapshot) => {
-        var progress = (uploadTask.snapshot.bytesTransferred / uploadTask.snapshot.totalBytes) * 100;
-        console.log(progress + "% done");
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        despesa.url = uploadTask.snapshot.downloadURL;
-        return new Promise((resolve, reject) => {
-            this.db.list(this.PATH)
-              .update(despesa.key, { url: despesa.url, fullPath: despesa.fullPath })
-              .then(() => resolve())
-              .catch((e) => reject(e));
-        });
-      } 
-    )
+  savePhoto(despesa, image) {
+    const pictures = this.fb.storage().ref('pictures/' + despesa.key);
+    pictures.putString(image, 'data_url');
   }
-
-  removeFile(fullPath: string) {
-    let storageRef = this.fb.storage().ref();
-    storageRef.child(fullPath).delete();
-  }
-  
 }

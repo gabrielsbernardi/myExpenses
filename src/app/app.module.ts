@@ -35,6 +35,7 @@ import { CreditoListPage } from '../pages/credito/credito-list/credito-list';
 import { GastoProvider } from '../providers/gasto/gasto';
 import { GastoListPage } from '../pages/gasto/gasto-list/gasto-list';
 import { GeralProvider } from '../providers/geral/geral';
+import { Camera } from '@ionic-native/camera';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -90,7 +91,8 @@ export const firebaseConfig = {
     CreditoProvider,
     GastoProvider,
     GeralProvider,
-    DecimalPipe
+    DecimalPipe,
+    Camera
   ]
 })
 export class AppModule {}

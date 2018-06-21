@@ -25,6 +25,10 @@ export class DespesaEditPage implements AfterViewInit {
   categorias: Array<categoriaView> = [];
   exibirFabBtnOptions: boolean = false;
 
+  private dataAntiga;
+  private numParcelasAntiga;
+  private valorAntigo;
+
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private formBuilder: FormBuilder,
@@ -34,6 +38,11 @@ export class DespesaEditPage implements AfterViewInit {
               private gastoProvider: GastoProvider) {
     this.categorias = this.categoriaProvider.getAllCategotiasViewValues();
     this.despesa = this.navParams.data.despesa || {};
+    if (this.despesa) {
+      this.dataAntiga = this.despesa.data_compra;
+      this.numParcelasAntiga = this.despesa.num_parcela;
+      this.valorAntigo = this.despesa.valor;
+    }
     this.createForm();
     this.exibirFabBtnOptions = this.despesa.key;
   }
@@ -62,33 +71,53 @@ export class DespesaEditPage implements AfterViewInit {
 
   onSubmit() {
     if (this.form.valid) {
+      var salvarGastos = false;
       this.provider.save(this.form.value)
         .then((result: any) => {
-          if (!this.form.value.key) {
+          if (!this.despesa.key) {
             this.form.value.key = result;
             this.updateBtnImageNF();
             this.exibirFabBtnOptions = true;
-          } else {
-            this.gastoProvider.removeDespesa(this.despesa.key);
+            salvarGastos = true;
           }
-          this.gastoProvider.saveDespesa(this.form.value);
+          this.despesa = this.form.value;
           this.showMessage('Despesa salva com sucesso.')
+        })
+        .then(() => {
+          if (salvarGastos) {
+            this.gastoProvider.saveDespesa(this.form.value);
+          } else {
+            this.atualizarGastos();
+          }
+
+          this.createForm();
+          this.dataAntiga = this.despesa.data_compra;
+          this.numParcelasAntiga = this.despesa.num_parcela;
+          this.valorAntigo = this.despesa.valor;
+
+          this.content.scrollToTop();
         })
         .catch((e) => {
           this.showMessage('Erro ao salvar a Despesa.');
           console.error(e);
         });
-        this.despesa = this.form.value;
-        this.createForm();
-        this.content.scrollToTop();
+    }
+  }
+
+  private atualizarGastos() {
+    if (this.despesa.key && (this.dataAntiga != this.despesa.data_compra 
+          || this.numParcelasAntiga != this.despesa.num_parcela
+          || this.valorAntigo != this.despesa.valor)) {
+      this.gastoProvider.removeDespesa(this.despesa.key);
+      this.gastoProvider.saveDespesa(this.despesa);
     }
   }
 
   removeDespesa() {
-    var key = this.form.value.key;
+    var despesaAux = this.form.value;
     this.provider.remove(this.despesa)
       .then(() => {
-        this.gastoProvider.removeDespesa(key);
+        this.gastoProvider.removeDespesa(despesaAux);
         this.showMessage('Despesa removida com sucesso');
         this.navCtrl.pop();
       })

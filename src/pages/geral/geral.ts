@@ -5,6 +5,7 @@ import { GeralProvider } from '../../providers/geral/geral';
 import { GraficoPieView } from '../../providers/geral/grafico-pie-view-values';
 import { GraficoLineView } from '../../providers/geral/grafico-line-view-values';
 import { GeralView } from '../../providers/geral/geral-view-values';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -23,14 +24,19 @@ export class GeralPage {
   private geralViewValues: GeralView;
   private cores: Array<string> = [];
 
-
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
-              private provider: GeralProvider) {
+              private provider: GeralProvider,
+            private decimalPipe: DecimalPipe) {
+    document.getElementById('main-menu').hidden = false
     this.popularCores();
     this.geralViewValues = this.provider.getGeralViewValues();
     this.pieValues = this.provider.getPieValues();
     this.lineValues = this.provider.getLineValues();
+  }
+
+  ngOnInit() {
+    console.log("Teste");
   }
 
   ngAfterViewInit() {
@@ -40,15 +46,8 @@ export class GeralPage {
     }, 150);
   }
 
-  getChart(context, chartType, data, options?) {
-    return new chartJs(context, {
-      data,
-      options,
-      type: chartType
-    })
-  }
-
   getPieCanvas() {
+    var self = this;
     var labels = [];
     var datas = [];
     var backgroundColors = [];
@@ -68,10 +67,25 @@ export class GeralPage {
         backgroundColor: backgroundColors
       }]
     }
-    return this.getChart(this.pieCanvas.nativeElement, 'pie', data);
+
+    return new chartJs(this.pieCanvas.nativeElement, {
+      data,
+      options: {
+        tooltips: {
+          enabled: true,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return 'R$ ' + self.decimalPipe.transform(parseFloat(data['datasets'][0]['data'][tooltipItem['index']]), '1.2-2');
+            }
+          }
+        }
+      },
+      type: 'pie'
+    })
   }
   
   getLineCanvas() {
+    var self = this;
     var labels = [];
     var dadosDespesas = [];
     var dadosCreditos = [];
@@ -111,7 +125,29 @@ export class GeralPage {
       }]
     };
 
-    return this.getChart(this.lineCanvas.nativeElement, 'line', data);
+    return new chartJs(this.lineCanvas.nativeElement, {
+      data,
+      options: {
+        scales: {
+          yAxes: [{
+              ticks: {
+                  callback: function(value, index, values) {
+                      return 'R$ ' + self.decimalPipe.transform(value, '1.2-2');
+                  }
+              }
+          }]
+        },
+        tooltips: {
+          enabled: true,
+          callbacks: {
+            label: function(tooltipItems, data) {
+              return 'R$ ' + self.decimalPipe.transform(parseFloat(tooltipItems.yLabel), '1.2-2');
+            }
+          }
+        }
+      },
+      type: 'line'
+    })
   }
 
   private popularCores() {

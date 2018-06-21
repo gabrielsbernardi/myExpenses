@@ -61,7 +61,7 @@
   <ion-fab *ngIf="exibirFabBtnOptions" bottom right>
     <button ion-fab mini color="color-default-system"><ion-icon name="arrow-dropup"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab mini color="secondary" type="submit" [disabled]="!form.valid" (click)="onSubmit()">
+      <button ion-fab mini color="secondary" [disabled]="!form.valid" (click)="onSubmit()">
           <ion-icon name="checkmark"></ion-icon>
       </button>
       <button ion-fab mini color="danger" [disabled]="!despesa" (click)="removeDespesa()">
@@ -71,7 +71,7 @@
   </ion-fab>
 
   <ion-fab *ngIf="!exibirFabBtnOptions" bottom right>
-    <button ion-fab mini color="secondary" type="submit" [disabled]="!form.valid" (click)="onSubmit()">
+    <button ion-fab mini color="secondary" [disabled]="!form.valid" (click)="onSubmit()">
         <ion-icon name="checkmark"></ion-icon>
     </button>
   </ion-fab>

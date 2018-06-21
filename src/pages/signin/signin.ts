@@ -27,6 +27,7 @@ export class SigninPage {
   constructor(public navCtrl: NavController, 
               private toastCtrl: ToastController,
               private authService: AuthService) {
+    document.getElementById('main-menu').hidden = true
   }
 
   createAccount() {
