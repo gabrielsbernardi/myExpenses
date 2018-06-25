@@ -20,14 +20,29 @@ export class CreditoProvider {
   }
 
   getAll() {
+    var self = this;
     return this.db.list(this.PATH, ref => ref.orderByChild('data_inicial_recebimento'))
       .snapshotChanges()
       .map(changes => {
         return changes.map(credito => ({
           key: credito.payload.key,
+          valor_formatado: self.decimalPipe.transform(credito.payload.val().valor, '1.2-2'),
+          data_formatada: self.formatDate(credito.payload.val().data_inicial_recebimento),
           ...credito.payload.val()
         }));
       });
+  }
+
+  private formatDate(d) {
+    var date = new Date(d);
+    let month = String(date.getMonth() + 1);
+    let day = String(date.getDate());
+    const year = String(date.getFullYear());
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return `${day}/${month}/${year}`;
   }
 
   get(key: string) {

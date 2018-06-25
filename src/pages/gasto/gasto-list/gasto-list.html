@@ -23,8 +23,12 @@
 
   <ion-list>
     <ion-item *ngFor="let gasto of gastos" (click)="detailGasto(gasto)">
-      <h1>{{ gasto.data }}</h1>
-      <p class="negativo" [ngClass]="{'positivo' : gasto.valor >= 0}">R$ {{ gasto.valor }}</p>
+      <ion-label class="label label-md">
+        <h2>{{ gasto.data }}</h2>
+      </ion-label>
+      <ion-label style="text-align: right;" class="label label-md">
+          <h2 class="negativo" [ngClass]="{'positivo' : gasto.valor >= 0}">R$ {{ gasto.valor }}</h2>
+      </ion-label>
     </ion-item>
   </ion-list>
   

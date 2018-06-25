@@ -27,14 +27,14 @@
   <ion-list>
     <ion-item-sliding #slidingItem *ngFor="let despesa of despesas | async | despesaSearch : dsc">
       <ion-item #item (click)="open(slidingItem, item)">
-        <div>
-          <div class="dsc-despesa-line">
-            <h2>{{ despesa.dsc }}</h2>
-          </div>
-          <div>
-            <h2>R$ {{ despesa.valor }}</h2>
-          </div>
-        </div>
+        <ion-label class="label label-md">
+          <h2>{{ despesa.dsc }}</h2>
+          <p>{{ despesa.data_formatada }}</p>
+        </ion-label>
+        <ion-label style="text-align: right;" class="label label-md">
+          <h2>R$ {{ despesa.valor_formatado }}</h2>
+          <p>{{ despesa.num_parcela }}x</p>
+        </ion-label>
       </ion-item>
       <ion-item-options side="left">
         <button ion-button color="secondary" (click)="editDespesa(despesa)">

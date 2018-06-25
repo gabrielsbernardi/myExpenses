@@ -14,6 +14,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { DespesaProvider } from "../despesa/despesa"
 import { DecimalPipe } from '@angular/common';
+import { GastoRemocao } from './gasto-remocao';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -172,13 +173,20 @@ export class GastoProvider {
   removeDespesa(idDespesa: string) {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
-    var self = this;
-    refPrincipal.once("child_added", function(pathData) {
+    var gastoRemocao = [];
+    refPrincipal.on("child_added", function(pathData) {
       var path = pathPrincipal + pathData.key + '/despesas/';
       var ref = firebase.database().ref(path);
-      ref.orderByChild('id_despesa').equalTo(idDespesa).once("child_added", function(gasto) {
-        self.db.list(path).remove(gasto.key);
+      ref.orderByChild('id_despesa').equalTo(idDespesa).on("child_added", function(gasto) {
+        var gr = new GastoRemocao;
+        gr.path = path;
+        gr.key = gasto.key;
+        gastoRemocao.push(gr);
       });
+    });
+
+    gastoRemocao.forEach(gr => {
+      this.db.list(gr.path).remove(gr.key);
     });
   }
 
@@ -235,8 +243,7 @@ export class GastoProvider {
         this.db.list(this.PATH + anoMesRecebimento + '/creditos/')
           .push({ id_credito: credito.key,
                   valor: credito.valor,
-                  data: anoMesRecebimento })
-          .then(() => resolve());
+                  data: anoMesRecebimento });
       }
     });
   }
@@ -245,12 +252,20 @@ export class GastoProvider {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
     var self = this;
-    refPrincipal.once("child_added", function(pathData) {
+    var gastoRemocao = [];
+    refPrincipal.on("child_added", function(pathData) {
       var path = pathPrincipal + pathData.key + '/creditos/';
       var ref = firebase.database().ref(path);
-      ref.orderByChild('id_credito').equalTo(idCredito).once("child_added", function(gasto) {
-        self.db.list(path).remove(gasto.key);
+      ref.orderByChild('id_credito').equalTo(idCredito).on("child_added", function(gasto) {
+        var gr = new GastoRemocao;
+        gr.path = path;
+        gr.key = gasto.key;
+        gastoRemocao.push(gr);
       });
+    });
+
+    gastoRemocao.forEach(gr => {
+      this.db.list(gr.path).remove(gr.key);
     });
   }
 }

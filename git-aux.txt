@@ -17,3 +17,7 @@ npm install --save @ionic-native/image-picker
 -- Instalar câmera
 ionic cordova plugin add cordova-plugin-camera
 npm install --save @ionic-native/camera
+
+-- Instalar Data
+ionic cordova plugin add cordova-plugin-datepicker
+npm install --save @ionic-native/date-picker

@@ -40,7 +40,7 @@ export class CreditoEditPage {
     this.setupPageTitle();
     this.exibirFabBtnOptions = this.credito.key;
   }
-
+  
   private setupPageTitle() {
     this.title = this.navParams.data.credito ? 'Alteração da Crédito' : 'Novo Crédito'
   }

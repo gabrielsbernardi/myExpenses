@@ -23,7 +23,6 @@ export class MyApp {
   @ViewChild('NAV') nav: Nav;
   rootPage: any;
   public pages: Array<{ titulo: string, component: any, icon: string }>;
-  isGeralPage = false;
   private possuiCategoriaCadastrada: boolean = false;
 
   constructor(platform: Platform, 
@@ -33,13 +32,11 @@ export class MyApp {
               private authService: AuthService) {
     afAuth.authState.subscribe(user => {
       if (user) {
-        this.rootPage = GeralPage;
+        this.rootPage = GastoListPage;
       } else {
         this.rootPage = SigninPage;
       }
     });
-
-    this.isGeralPage = this.rootPage == GeralPage;
     
     this.pages = [
       { titulo: 'Informações Gerais', component: GeralPage, icon: 'md-pie'},

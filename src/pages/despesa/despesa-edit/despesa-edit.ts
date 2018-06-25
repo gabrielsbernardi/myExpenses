@@ -24,6 +24,7 @@ export class DespesaEditPage implements AfterViewInit {
   despesa: any;
   categorias: Array<categoriaView> = [];
   exibirFabBtnOptions: boolean = false;
+  title: string;
 
   private dataAntiga;
   private numParcelasAntiga;
@@ -44,7 +45,12 @@ export class DespesaEditPage implements AfterViewInit {
       this.valorAntigo = this.despesa.valor;
     }
     this.createForm();
+    this.setupPageTitle();
     this.exibirFabBtnOptions = this.despesa.key;
+  }
+
+  private setupPageTitle() {
+    this.title = this.navParams.data.despesa ? 'Alteração da Despesa' : 'Nova Despesa'
   }
 
   ngAfterViewInit() {
@@ -96,6 +102,7 @@ export class DespesaEditPage implements AfterViewInit {
           this.valorAntigo = this.despesa.valor;
 
           this.content.scrollToTop();
+          this.setupPageTitle();
         })
         .catch((e) => {
           this.showMessage('Erro ao salvar a Despesa.');

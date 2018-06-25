@@ -27,8 +27,14 @@
     <ion-list>
       <ion-item-sliding #slidingItem *ngFor="let credito of creditos | async | creditoSearch : dsc">
         <ion-item #item (click)="open(slidingItem, item)">
-          <h1>{{ credito.dsc }}</h1>
-          <p>{{ credito.valor }}</p>
+          <ion-label class="label label-md">
+              <h2>{{ credito.dsc }}</h2>
+              <p>{{ credito.data_formatada }}</p>
+          </ion-label>
+          <ion-label style="text-align: right;" class="label label-md">
+            <h2>R$ {{ credito.valor_formatado }}</h2>
+            <p>{{ credito.num_parcela }}x</p>
+          </ion-label>
         </ion-item>
         <ion-item-options side="left">
           <button ion-button color="secondary" (click)="editCredito(credito)">

@@ -35,10 +35,6 @@ export class GeralPage {
     this.lineValues = this.provider.getLineValues();
   }
 
-  ngOnInit() {
-    console.log("Teste");
-  }
-
   ngAfterViewInit() {
     setTimeout(() => {
       this.pieCanvas = this.getPieCanvas();

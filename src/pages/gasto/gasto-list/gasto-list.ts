@@ -25,7 +25,6 @@ export class GastoListPage {
   }
 
   detailGasto(gasto: any) {
-    
     this.navCtrl.push('GastoDetailPage', {gasto: gasto});
   }
 
