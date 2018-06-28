@@ -220,8 +220,8 @@ export class GeralProvider {
     geral.title = this.getDataExtenso(path);
     geral.valor_despesas = this.decimalPipe.transform(valorDespesa, '1.2-2');
     geral.valor_creditos = this.decimalPipe.transform(valorCredito, '1.2-2');
-    geral.valor_total = this.decimalPipe.transform((valorCredito - valorDespesa), '1.2-2');
-
+    geral.valor_total = valorCredito - valorDespesa;
+    geral.valorFormatado = this.decimalPipe.transform((valorCredito - valorDespesa), '1.2-2');
     return geral;
   }
 

@@ -17,7 +17,7 @@
     </div>
     <ion-item-divider style="margin-top: -17px;"></ion-item-divider>
     <div style="margin-top: 10px; float: right">
-      <h1 class="negativo" [ngClass]="{'positivo' : gasto.valor >= 0}">Total: R$ {{ gasto.valor }}</h1>
+      <h1 class="negativo" [ngClass]="{'positivo' : gasto.valor >= 0}">Total: R$ {{ gasto.valorFormatado }}</h1>
     </div>
   </div>
 

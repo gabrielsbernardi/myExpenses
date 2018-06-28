@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, AlertController, ItemSliding, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController, ItemSliding, Item, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 //Provider
@@ -18,6 +18,7 @@ import { CategoriaProvider } from '../../../providers/categoria/categoria';
 export class DespesaListPage {
   showSearchbar: boolean;
   despesas: Observable<any>;
+  loader: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -25,9 +26,12 @@ export class DespesaListPage {
               private toast: ToastController,
               private gastoProvider: GastoProvider,
               private categoriaProvider: CategoriaProvider,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private laodingCtrl: LoadingController) {
     this.showSearchbar = false;
+    this.presentLoading("Carregando despesas...");
     this.despesas = this.provider.getAll();
+    this.loader.dismiss();
   }
 
   newDespesa() {
@@ -59,9 +63,11 @@ export class DespesaListPage {
   }
 
   removeDespesa(despesa: any) {
+    this.presentLoading("Removendo despesa...");
     this.provider.remove(despesa)
       .then(() => {
         this.gastoProvider.removeDespesa(despesa.key);
+        this.loader.dismiss();
         this.showMessage('Despesa removida com sucesso')
       })
       .catch((e) => {
@@ -83,5 +89,13 @@ export class DespesaListPage {
     itemSlide.setElementClass("active-slide", true);
     itemSlide.setElementClass("active-options-left", true);
     item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

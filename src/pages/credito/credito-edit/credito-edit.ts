@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 //Provider
@@ -19,6 +19,7 @@ export class CreditoEditPage {
   form: FormGroup;
   credito: any;
   exibirFabBtnOptions: boolean = false;
+  loader: any;
 
   private dataAntiga;
   private numParcelasAntiga;
@@ -29,7 +30,8 @@ export class CreditoEditPage {
               private formBuilder: FormBuilder,
               private provider: CreditoProvider,
               private toast: ToastController,
-              private gastoProvider: GastoProvider) {
+              private gastoProvider: GastoProvider,
+              private laodingCtrl: LoadingController) {
     this.credito = this.navParams.data.credito || {};
     if (this.credito) {
       this.dataAntiga = this.credito.data_inicial_recebimento;
@@ -57,6 +59,7 @@ export class CreditoEditPage {
 
   onSubmit() {
     if (this.form.valid) {
+      this.presentLoading("Salvando crédito...");
       var salvarGastos = false;
       this.provider.save(this.form.value)
         .then((result: any) => {
@@ -66,7 +69,6 @@ export class CreditoEditPage {
           }
 
           this.credito = this.form.value;
-          this.showMessage('Crédito salvo com sucesso.');
         })
         .then(() => {
           if (salvarGastos) {
@@ -74,6 +76,9 @@ export class CreditoEditPage {
           } else {
             this.atualizarGastos();
           }
+
+          this.loader.dismiss();
+          this.showMessage('Crédito salvo com sucesso.');
           this.navCtrl.pop();
         })
         .catch((e) => {
@@ -93,10 +98,12 @@ export class CreditoEditPage {
   }
 
   removeCredito() {
+    this.presentLoading("Removendo crédito...");
     var key = this.form.value.key;
     this.provider.remove(this.credito.key)
       .then(() => {
         this.gastoProvider.removeCredito(key);
+        this.loader.dismiss();
         this.showMessage('Crédito removido com sucesso');
         this.navCtrl.pop();
       })
@@ -108,5 +115,13 @@ export class CreditoEditPage {
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

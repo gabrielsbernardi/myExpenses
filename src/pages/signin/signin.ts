@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
 import { SignupPage } from '../signup/signup'
 import { User } from '../../providers/auth/user';
 import { NgForm } from '@angular/forms';
@@ -23,10 +23,12 @@ export class SigninPage {
 
   user: User = new User();
   @ViewChild('form') form: NgForm;
+  loader: any;
 
   constructor(public navCtrl: NavController, 
               private toastCtrl: ToastController,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private laodingCtrl: LoadingController) {
     document.getElementById('main-menu').hidden = true
   }
 
@@ -42,9 +44,11 @@ export class SigninPage {
     if (this.form.valid) {
       let toast = this.toastCtrl.create({ duration: 3000, position: 'bottom' });
 
+      this.presentLoading("Verificando conta...");
       this.authService.signIn(this.user)
         .then((user: any) => {
           this.navCtrl.setRoot(GeralPage);
+          this.loader.dismiss();
         })
         .catch((error: any) => {
           if (error.code  == 'auth/invalid-email') {
@@ -59,5 +63,13 @@ export class SigninPage {
           toast.present();
         });
     }
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

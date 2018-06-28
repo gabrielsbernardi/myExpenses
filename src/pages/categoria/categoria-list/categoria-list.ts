@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ItemSliding, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ItemSliding, Item, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 //Provider
@@ -16,13 +16,18 @@ import { CategoriaProvider } from '../../../providers/categoria/categoria';
 export class CategoriaListPage {
   showSearchbar: boolean;
   categorias: Observable<any>;
+  loader: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: CategoriaProvider,
-              private toast: ToastController) {
+              private toast: ToastController,
+              private laodingCtrl: LoadingController) {
     this.showSearchbar = false;
+
+    this.presentLoading("Carregando categorias...");
     this.categorias = this.provider.getAll();
+    this.loader.dismiss();
   }
 
   newCategoria() {
@@ -57,5 +62,13 @@ export class CategoriaListPage {
     itemSlide.setElementClass("active-slide", true);
     itemSlide.setElementClass("active-options-left", true);
     item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { DespesaView } from '../../../providers/despesa/despesa-view-values';
@@ -24,15 +24,19 @@ export class GastoDetailPage {
   despesas: Array<DespesaView> = [];
   creditos: Array<CreditoView> = [];
   dadosMesSelect: string;
+  loader: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private despesaProvider: DespesaProvider,
-              private creditoProvider: CreditoProvider) {
+              private creditoProvider: CreditoProvider,
+              private laodingCtrl: LoadingController) {
     this.gasto = this.navParams.data.gasto;
+    this.presentLoading("Carregando detalhes dos gastos...");
     this.carregarDespesas();
     this.carregarCreditos();
     this.title = this.gasto.data;
+    this.loader.dismiss();
   }
 
   ionViewWillEnter(){
@@ -61,5 +65,13 @@ export class GastoDetailPage {
         }
       });
     }
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

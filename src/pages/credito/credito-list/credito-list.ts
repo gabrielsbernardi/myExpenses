@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ItemSliding, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ItemSliding, Item, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 //Provider
@@ -18,14 +18,19 @@ export class CreditoListPage {
 
   showSearchbar: boolean;
   creditos: Observable<any>;
+  loader: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: CreditoProvider,
               private toast: ToastController,
-              private gastoProvider: GastoProvider) {
+              private gastoProvider: GastoProvider,
+              private laodingCtrl: LoadingController) {
     this.showSearchbar = false;
+
+    this.presentLoading("Carregando créditos...");
     this.creditos = this.provider.getAll();
+    this.loader.dismiss();
   }
 
   newCredito() {
@@ -37,9 +42,11 @@ export class CreditoListPage {
   }
 
   removeCredito(credito: any) {
+    this.presentLoading("Removendo crédito...");
     this.provider.remove(credito.key)
       .then(() => {
         this.gastoProvider.removeCredito(credito.key);
+        this.loader.dismiss();
         this.showMessage('Credito removido com sucesso')
       })
       .catch((e) => {
@@ -61,5 +68,13 @@ export class CreditoListPage {
     itemSlide.setElementClass("active-slide", true);
     itemSlide.setElementClass("active-options-left", true);
     item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

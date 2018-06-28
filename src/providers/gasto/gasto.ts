@@ -71,7 +71,8 @@ export class GastoProvider {
 
       gastoView.valorGasto = self.decimalPipe.transform(valorGasto, '1.2-2');
       gastoView.valorCredito = self.decimalPipe.transform(valorCredito, '1.2-2');
-      gastoView.valor = self.decimalPipe.transform(valorCredito - valorGasto, '1.2-2');
+      gastoView.valor = valorCredito - valorGasto;
+      gastoView.valorFormatado = self.decimalPipe.transform(valorCredito - valorGasto, '1.2-2');
 
       self.arrayGastos.push(gastoView);
     });

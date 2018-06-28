@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Observable } from 'rxjs/Observable';
 import { Content } from 'ionic-angular';
@@ -25,6 +25,7 @@ export class DespesaEditPage implements AfterViewInit {
   categorias: Array<categoriaView> = [];
   exibirFabBtnOptions: boolean = false;
   title: string;
+  loader: any;
 
   private dataAntiga;
   private numParcelasAntiga;
@@ -36,7 +37,9 @@ export class DespesaEditPage implements AfterViewInit {
               private provider: DespesaProvider,
               private toast: ToastController,
               private categoriaProvider: CategoriaProvider,
-              private gastoProvider: GastoProvider) {
+              private gastoProvider: GastoProvider,
+              private laodingCtrl: LoadingController) {
+    this.presentLoading("Carregando despesa...");
     this.categorias = this.categoriaProvider.getAllCategotiasViewValues();
     this.despesa = this.navParams.data.despesa || {};
     if (this.despesa) {
@@ -47,6 +50,7 @@ export class DespesaEditPage implements AfterViewInit {
     this.createForm();
     this.setupPageTitle();
     this.exibirFabBtnOptions = this.despesa.key;
+    this.loader.dismiss();
   }
 
   private setupPageTitle() {
@@ -77,6 +81,7 @@ export class DespesaEditPage implements AfterViewInit {
 
   onSubmit() {
     if (this.form.valid) {
+      this.presentLoading("Salvando despesa...");
       var salvarGastos = false;
       this.provider.save(this.form.value)
         .then((result: any) => {
@@ -103,6 +108,7 @@ export class DespesaEditPage implements AfterViewInit {
 
           this.content.scrollToTop();
           this.setupPageTitle();
+          this.loader.dismiss();
         })
         .catch((e) => {
           this.showMessage('Erro ao salvar a Despesa.');
@@ -121,10 +127,12 @@ export class DespesaEditPage implements AfterViewInit {
   }
 
   removeDespesa() {
+    this.presentLoading("Removendo despesa...");
     var despesaAux = this.form.value;
     this.provider.remove(this.despesa)
       .then(() => {
         this.gastoProvider.removeDespesa(despesaAux);
+        this.loader.dismiss();
         this.showMessage('Despesa removida com sucesso');
         this.navCtrl.pop();
       })
@@ -146,4 +154,11 @@ export class DespesaEditPage implements AfterViewInit {
     document.getElementById("btnImageNF").hidden = false;
   }
   
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
+  }
 }
