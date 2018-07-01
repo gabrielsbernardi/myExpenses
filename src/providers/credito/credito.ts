@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthService } from '../auth/auth-service';
 import * as firebase from 'firebase';
-import { CreditoView } from './credito-view-values';
 import { DecimalPipe } from '@angular/common';
 
 /**
@@ -53,21 +52,6 @@ export class CreditoProvider {
           key: credito.payload.key,
           ...credito.payload.val() }
       });
-  }
-
-  getCreditoViewValues(idDespesa: string) {
-    var self = this;
-    var credito;
-    firebase.database().ref(this.PATH).on("child_added", function(c) {
-      if (c.key == idDespesa) {
-        credito = new CreditoView();
-        credito.dsc = c.val().dsc;
-        credito.data = c.val().data_inicial_recebimento;
-        credito.valor = self.decimalPipe.transform((c.val().valor / c.val().num_parcela), '1.2-2');
-        return credito;
-      }
-    });
-    return credito;
   }
 
   save(credito: any) {

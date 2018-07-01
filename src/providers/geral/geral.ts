@@ -32,18 +32,17 @@ export class GeralProvider {
     this.pieValues = [];
 
     var graficoPie;
-    firebase.database().ref(this.PATH_CATEGORIA).on("child_added", function(categoria) {
+    firebase.database().ref(this.PATH_CATEGORIA).orderByChild("tipo").on("child_added", function(categoria) {
       graficoPie = new GraficoPieView();
       graficoPie.tipo_categoria = categoria.val().tipo;
       graficoPie.valor_total_gastos = self.getValorTotalGastosPorCategoria(categoria.key);
 
       self.pieValues.push(graficoPie);
     });
-
     return this.pieValues;
   }
 
-  private getValorTotalGastosPorCategoria(idCategoria: string) {
+  getValorTotalGastosPorCategoria(idCategoria: string) {
     var valor = 0;
     var current = new Date();
     var ano = current.getFullYear();

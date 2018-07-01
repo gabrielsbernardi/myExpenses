@@ -22,6 +22,7 @@
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
     "@firebase/app": "^0.2.0",
+    "@ionic-native/base64": "^4.8.0",
     "@ionic-native/camera": "^4.7.0",
     "@ionic-native/core": "4.7.0",
     "@ionic-native/date-picker": "^4.7.0",

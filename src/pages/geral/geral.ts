@@ -1,11 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import chartJs from 'chart.js';
 import { GeralProvider } from '../../providers/geral/geral';
 import { GraficoPieView } from '../../providers/geral/grafico-pie-view-values';
 import { GraficoLineView } from '../../providers/geral/grafico-line-view-values';
 import { GeralView } from '../../providers/geral/geral-view-values';
 import { DecimalPipe } from '@angular/common';
+import { CategoriaProvider } from '../../providers/categoria/categoria';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -18,26 +20,44 @@ import { DecimalPipe } from '@angular/common';
 export class GeralPage {
   @ViewChild('pieCanvas') pieCanvas: any;
   @ViewChild('lineCanvas') lineCanvas: any;
+  loader: any;
 
   private pieValues: Array<GraficoPieView> = [];
   private lineValues: Array<GraficoLineView> = [];
   private geralViewValues: GeralView;
   private cores: Array<string> = [];
+  private categorias: Observable<any>;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private provider: GeralProvider,
-            private decimalPipe: DecimalPipe) {
-    document.getElementById('main-menu').hidden = false
+              private decimalPipe: DecimalPipe,
+              private laodingCtrl: LoadingController,
+              private categoriaProvider: CategoriaProvider) {
+    this.presentLoading("Carregando informações...");
     this.popularCores();
+    this.carregarPieValues()
     this.geralViewValues = this.provider.getGeralViewValues();
-    this.pieValues = this.provider.getPieValues();
     this.lineValues = this.provider.getLineValues();
+    
+    this.loader.dismiss();
+  }
+
+  private carregarPieValues() {
+    this.categorias = this.categoriaProvider.getAll();
+    this.categorias.forEach(categorias => {
+      categorias.forEach(categoria => {
+        var graficoPie = new GraficoPieView();
+        graficoPie.tipo_categoria = categoria.tipo;
+        graficoPie.valor_total_gastos = this.provider.getValorTotalGastosPorCategoria(categoria.key);
+        this.pieValues.push(graficoPie);
+      });
+      this.pieCanvas = this.getPieCanvas();
+    })
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.pieCanvas = this.getPieCanvas();
       this.lineCanvas = this.getLineCanvas();
     }, 150);
   }
@@ -164,5 +184,13 @@ export class GeralPage {
 
   private getCor() {
     return this.cores[Math.floor(Math.random() * (12 - 0 + 1)) + 0];
+  }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
   }
 }

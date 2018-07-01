@@ -32,6 +32,7 @@ export class DespesaListPage {
     this.presentLoading("Carregando despesas...");
     this.despesas = this.provider.getAll();
     this.loader.dismiss();
+    this.categoriaProvider.getAllCategotiasViewValues();
   }
 
   newDespesa() {

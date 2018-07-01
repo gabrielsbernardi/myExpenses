@@ -30,6 +30,7 @@ export class DespesaEditPage implements AfterViewInit {
   private dataAntiga;
   private numParcelasAntiga;
   private valorAntigo;
+  private categoriaAntiga;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -46,6 +47,7 @@ export class DespesaEditPage implements AfterViewInit {
       this.dataAntiga = this.despesa.data_compra;
       this.numParcelasAntiga = this.despesa.num_parcela;
       this.valorAntigo = this.despesa.valor;
+      this.categoriaAntiga = this.despesa.id_categoria;
     }
     this.createForm();
     this.setupPageTitle();
@@ -105,6 +107,7 @@ export class DespesaEditPage implements AfterViewInit {
           this.dataAntiga = this.despesa.data_compra;
           this.numParcelasAntiga = this.despesa.num_parcela;
           this.valorAntigo = this.despesa.valor;
+          this.categoriaAntiga = this.despesa.id_categoria;
 
           this.content.scrollToTop();
           this.setupPageTitle();
@@ -120,7 +123,8 @@ export class DespesaEditPage implements AfterViewInit {
   private atualizarGastos() {
     if (this.despesa.key && (this.dataAntiga != this.despesa.data_compra 
           || this.numParcelasAntiga != this.despesa.num_parcela
-          || this.valorAntigo != this.despesa.valor)) {
+          || this.valorAntigo != this.despesa.valor
+          || this.categoriaAntiga != this.despesa.id_categoria)) {
       this.gastoProvider.removeDespesa(this.despesa.key);
       this.gastoProvider.saveDespesa(this.despesa);
     }

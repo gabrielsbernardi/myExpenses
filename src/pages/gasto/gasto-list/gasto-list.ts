@@ -23,7 +23,7 @@ export class GastoListPage {
               public navParams: NavParams,
               private provider: GastoProvider,
               private laodingCtrl: LoadingController) {
-
+    document.getElementById('main-menu').hidden = false
     this.presentLoading("Carregando gastos...");
     this.gastos = this.provider.getAll();
     this.loader.dismiss();

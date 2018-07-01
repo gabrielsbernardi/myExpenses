@@ -10,61 +10,63 @@
 
 <ion-content padding>
 
-  <div style="margin-top: 15px;">
+  <div style="margin-top: -10px;">
     <div style="float: right; margin-bottom: -12px;"> 
       <p>Créditos: R$ {{ gasto.valorCredito }}</p>
       <p>Despesas: R$ {{ gasto.valorGasto }}</p>
     </div>
     <ion-item-divider style="margin-top: -17px;"></ion-item-divider>
-    <div style="margin-top: 10px; float: right">
+    <div style="margin-top: 10px; float: right;  margin-bottom: 15px;">
       <h1 class="negativo" [ngClass]="{'positivo' : gasto.valor >= 0}">Total: R$ {{ gasto.valorFormatado }}</h1>
     </div>
   </div>
 
-  <div padding>
-    <ion-segment [(ngModel)]="dadosMesSelect">
-      <ion-segment-button value="gasto">
-        Gastos
-      </ion-segment-button>
-      <ion-segment-button value="credito">
-        Créditos
-      </ion-segment-button>
-    </ion-segment>
-  </div>
+  <ion-card>
+    <div padding>
+      <ion-segment [(ngModel)]="dadosMesSelect">
+        <ion-segment-button value="gasto">
+          Gastos
+        </ion-segment-button>
+        <ion-segment-button value="credito">
+          Créditos
+        </ion-segment-button>
+      </ion-segment>
+    </div>
 
-  <div [ngSwitch]="dadosMesSelect">
-    <ion-list *ngSwitchCase="'gasto'">
-      <ion-item-sliding *ngFor="let despesa of despesas">
-        <ion-item>
-          <ion-label class="label label-md">
-              <h2>{{ despesa.dsc }}</h2>
-          </ion-label>
-          <ion-label style="text-align: right;" class="label label-md">
-            <h2>R$ {{ despesa.valor }}</h2>
-          </ion-label>
+    <div [ngSwitch]="dadosMesSelect">
+      <ion-list *ngSwitchCase="'gasto'">
+        <ion-item-sliding *ngFor="let despesa of despesas">
+          <ion-item>
+            <ion-label class="label label-md">
+                <h2>{{ despesa.dsc }}</h2>
+            </ion-label>
+            <ion-label style="text-align: right;" class="label label-md">
+              <h2>R$ {{ despesa.valor }}</h2>
+            </ion-label>
+          </ion-item>
+        </ion-item-sliding>
+        <ion-item *ngIf="despesas.length <= 0 || !despesas">
+          Nenhuma despesa neste mês.
         </ion-item>
-      </ion-item-sliding>
-      <ion-item *ngIf="despesas.length <= 0 || !despesas">
-        Não possui despesas neste mês.
-      </ion-item>
-    </ion-list>
+      </ion-list>
 
 
-    <ion-list *ngSwitchCase="'credito'">
-      <ion-item-sliding *ngFor="let credito of creditos">
-        <ion-item>
-          <ion-label class="label label-md">
-              <h2>{{ credito.dsc }}</h2>
-          </ion-label>
-          <ion-label style="text-align: right;" class="label label-md">
-            <h2>R$ {{ credito.valor }}</h2>
-          </ion-label>
+      <ion-list *ngSwitchCase="'credito'">
+        <ion-item-sliding *ngFor="let credito of creditos">
+          <ion-item>
+            <ion-label class="label label-md">
+                <h2>{{ credito.dsc }}</h2>
+            </ion-label>
+            <ion-label style="text-align: right;" class="label label-md">
+              <h2>R$ {{ credito.valor }}</h2>
+            </ion-label>
+          </ion-item>
+        </ion-item-sliding>
+        <ion-item *ngIf="creditos.length <= 0 || !creditos">
+          Nenhuma crédito neste mês.
         </ion-item>
-      </ion-item-sliding>
-      <ion-item *ngIf="creditos.length <= 0 || !creditos">
-        Não possui créditos neste mês.
-      </ion-item>
-    </ion-list>
-  </div>
+      </ion-list>
+    </div>
+  </ion-card>
 
 </ion-content>

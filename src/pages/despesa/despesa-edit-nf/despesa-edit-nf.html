@@ -9,21 +9,22 @@
   </ion-header>
 
 <ion-content padding>
+    <ion-card>
+      <div style="display:flex; flex-direction:column; justify-content:center;">
+        <img [src]="captureDataUrl" *ngIf="captureDataUrl">
+      </div>
+      <div style="text-align: center; background-color: #e6e4e4;" [hidden]="captureDataUrl">
+        <ion-icon name="image" style="font-size: 350px; color: #D3D3D3;"></ion-icon>
+      </div>
+    </ion-card>
 
-    <ion-item>
-      <img src="{{ imgPath }}">
-      <button ion-button block color="dark" (click)="takePhoto()">Take Photo</button>
-    </ion-item>
+    <button ion-button style="width: 100%;" color="danger" [hidden]="!captureDataUrl" (click)="remove()">
+      Excluir Imagem
+    </button>
 
     <ion-fab bottom right>
-      <button ion-fab mini color="color-default-system"><ion-icon name="arrow-dropup"></ion-icon></button>
-      <ion-fab-list side="top">
-        <button ion-fab mini color="secondary" type="submit" (click)="onSubmit()">
-            <ion-icon name="bookmark"></ion-icon>
-        </button>
-        <!--<button ion-fab mini color="danger" [disabled]="!despesa" (click)="removeDespesa()">
-          <ion-icon name="trash"></ion-icon>
-        </button>-->
-      </ion-fab-list>
+      <button color="color-default-system" ion-fab mini (click)="capture()" *ngIf="!captureDataUrl">
+          <ion-icon name="md-camera"></ion-icon>
+      </button>
     </ion-fab>
 </ion-content>

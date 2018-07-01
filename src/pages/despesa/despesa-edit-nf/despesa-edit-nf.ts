@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Component, Inject } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms'
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 //Provider
 import { DespesaProvider } from '../../../providers/despesa/despesa';
+
+import { FirebaseApp } from 'angularfire2';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -15,50 +17,78 @@ import { DespesaProvider } from '../../../providers/despesa/despesa';
   templateUrl: 'despesa-edit-nf.html',
 })
 export class DespesaEditNfPage {
-
-  imgPath: string;
   fileToUpload: any;
   title: string
   despesa: any;
+  loader: any;
+
+  referencia;
+  arquivo;
+  captureDataUrl: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private formBuilder: FormBuilder,
               private provider: DespesaProvider,
               private toast: ToastController,
-              private camera: Camera) {
+              private camera: Camera,
+              private laodingCtrl: LoadingController,
+              private despesaProvider: DespesaProvider) {
+    this.presentLoading("Carregando comprovante...");
     this.despesa = this.navParams.data.despesa;
-    this.imgPath = this.despesa.url || {};
+    this.captureDataUrl = this.despesa.url_imagem 
+    if (this.captureDataUrl == '') {
+      this.captureDataUrl = null;
+    }
     this.setupPageTitle();
+    this.loader.dismiss();
   }
 
   private setupPageTitle() {
     this.title = 'Comprovante: ' + this.despesa.dsc;
   }
 
-  takePhoto() {
-    try {
-      const options: CameraOptions = {
-        quality: 100,
-        targetHeight: 600,
-        targetWidth: 600,
+  capture() {
+    const cameraOptions: CameraOptions = {
+        quality: 50,
         destinationType: this.camera.DestinationType.DATA_URL,
         encodingType: this.camera.EncodingType.JPEG,
-        mediaType: this.camera.MediaType.PICTURE,
-        correctOrientation: true
-      }
+        mediaType: this.camera.MediaType.PICTURE
+    };
 
-      const result = this.camera.getPicture(options);
-      const image = 'data:image/jpeg;base64,${result}';
+    this.camera.getPicture(cameraOptions).then((imageData) => {
+      this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
+      this.upload();
+    }, (err) => {
+    });
+  }
 
-      this.provider.savePhoto(this.despesa, image);
-    } catch (e) {
-      console.error(e);
-    }
+  private upload() {
+    this.presentLoading("Salvando comprovante...");
+    this.despesa = this.despesaProvider.upload(this.despesa, this.captureDataUrl, this.loader);
+    this.captureDataUrl = this.despesa.url_imagem;
+    this.showMessage('Comprovante salvo com sucesso.')
+  }
+
+  remove() {
+    this.presentLoading("Removendo comprovante...");
+    this.despesa = this.despesaProvider.removeImage(this.despesa, this.loader, true);
+    this.captureDataUrl = null;
+    this.showMessage('Comprovante removido com sucesso.')
+    this.loader.dismiss();
   }
 
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
+
+  private presentLoading(msg: string) {
+    this.loader = this.laodingCtrl.create({
+      content: msg
+    });
+
+    this.loader.present();
+  }
+
 }

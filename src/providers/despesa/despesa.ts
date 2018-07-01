@@ -6,7 +6,6 @@ import { AuthService } from '../auth/auth-service';
 import { FirebaseApp } from 'angularfire2';
 import * as firebase from 'firebase';
 
-import { DespesaView } from './despesa-view-values';
 import { DecimalPipe } from '@angular/common';
 
 /**
@@ -48,21 +47,6 @@ export class DespesaProvider {
     return `${day}/${month}/${year}`;
   }
 
-  getDespesaViewValues(idDespesa: string) {
-    var self = this;
-    var despesa;
-    firebase.database().ref(this.PATH).on("child_added", function(d) {
-      if (d.key == idDespesa) {
-        despesa = new DespesaView();
-        despesa.dsc = d.val().dsc;
-        despesa.data = d.val().data_compra;
-        despesa.valor = self.decimalPipe.transform((d.val().valor / d.val().num_parcela), '1.2-2');
-        return despesa;
-      }
-    });
-    return despesa;
-  }
-
   get(key: string) {
     return this.db.object(this.PATH + key)
       .snapshotChanges()
@@ -75,6 +59,18 @@ export class DespesaProvider {
 
   save(despesa: any) {
     return new Promise((resolve, reject) => {
+      if (!despesa.url_imagem) {
+        despesa.url_imagem = '';
+      }
+
+      if (!despesa.url_local_compraimagem) {
+        despesa.local_compra = '';
+      }
+
+      if (!despesa.nome_imagem) {
+        despesa.nome_imagem = '';
+      }
+
       if (despesa.key) {
         this.db.list(this.PATH)
           .update(despesa.key, { dsc: despesa.dsc,
@@ -82,7 +78,9 @@ export class DespesaProvider {
                                  local_compra: despesa.local_compra,
                                  data_compra: despesa.data_compra,
                                  num_parcela: despesa.num_parcela,
-                                 id_categoria: despesa.id_categoria })
+                                 id_categoria: despesa.id_categoria,
+                                 url_imagem: despesa.url_imagem,
+                                 nome_imagem: despesa.nome_imagem })
           .then((result: any) => resolve(despesa.key))
           .catch((e) => reject(e));
       } else {
@@ -92,18 +90,46 @@ export class DespesaProvider {
                   local_compra: despesa.local_compra,
                   data_compra: despesa.data_compra,
                   num_parcela: despesa.num_parcela,
-                  id_categoria: despesa.id_categoria })
+                  id_categoria: despesa.id_categoria,
+                  url_imagem: despesa.url_imagem,
+                  nome_imagem: despesa.nome_imagem })
           .then((result: any) => resolve(result.key));
       }
     });
   }
 
   remove(item: any) {
+    this.removeImage(item, null, false);
     return this.db.list(this.PATH).remove(item.key);
   }
 
-  savePhoto(despesa, image) {
-    const pictures = this.fb.storage().ref('pictures/' + despesa.key);
-    pictures.putString(image, 'data_url');
+  upload(despesa: any, captureDataUrl: string, loader: any) {
+    var self = this;
+    let storageRef = firebase.storage().ref();
+    const filename = Math.floor(Date.now() / 1000);
+    const imageRef = storageRef.child(`comprovates/${this.auth.userLogged().uid}/${filename}.jpg`);
+    imageRef.putString(captureDataUrl, firebase.storage.StringFormat.DATA_URL).then((snapshot)=> {
+      despesa.url_imagem = snapshot.downloadURL;
+      despesa.nome_imagem = filename;
+      self.save(despesa);
+      loader.dismiss();
+      return despesa;
+    });
+  }
+
+  removeImage(despesa: any, loader: any, salvarDespesa: boolean) {
+    var self = this;
+    let storageRef = firebase.storage().ref();
+    const imageRef = storageRef.child(`comprovates/${this.auth.userLogged().uid}/${despesa.nome_imagem}.jpg`);
+    imageRef.delete().then(function() {
+      if (salvarDespesa) {
+        despesa.url_imagem = '';
+        despesa.nome_imagem = '';
+        self.save(despesa);
+        loader.dismiss();
+        return despesa;
+      }
+    }).catch(function(error) {
+    });
   }
 }

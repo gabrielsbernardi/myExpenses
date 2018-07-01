@@ -28,7 +28,7 @@
     <ion-item-sliding #slidingItem *ngFor="let despesa of despesas | async | despesaSearch : dsc">
       <ion-item #item (click)="open(slidingItem, item)">
         <ion-label class="label label-md">
-          <h2>{{ despesa.dsc }}</h2>
+          <h2>{{ despesa.dsc }} <ion-icon name="image" style="margin-left: 2px;" *ngIf="despesa.url_imagem"></ion-icon></h2>
           <p>{{ despesa.data_formatada }}</p>
         </ion-label>
         <ion-label style="text-align: right;" class="label label-md">

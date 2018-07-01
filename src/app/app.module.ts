@@ -37,6 +37,7 @@ import { GastoListPage } from '../pages/gasto/gasto-list/gasto-list';
 import { GeralProvider } from '../providers/geral/geral';
 import { Camera } from '@ionic-native/camera';
 import { DatePicker } from '@ionic-native/date-picker';
+import { Base64 } from '@ionic-native/base64';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD4tHeCMbZ4xhE9ASCsx_tzbugyU0ULtbo",
@@ -94,7 +95,8 @@ export const firebaseConfig = {
     GeralProvider,
     DecimalPipe,
     Camera,
-    DatePicker
+    DatePicker,
+    Base64
   ]
 })
 export class AppModule {}

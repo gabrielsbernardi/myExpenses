@@ -9,6 +9,7 @@ import { GastoView } from '../../../providers/gasto/gasto-view-values';
 import { DespesaProvider } from '../../../providers/despesa/despesa';
 import { CreditoView } from '../../../providers/credito/credito-view-values';
 import { CreditoProvider } from '../../../providers/credito/credito';
+import { DecimalPipe } from '@angular/common';
 
 /**
  * Gabriel Bernardi e Matheus Waltrich
@@ -26,11 +27,15 @@ export class GastoDetailPage {
   dadosMesSelect: string;
   loader: any;
 
+  despesasCarregadas: Observable<any>;
+  creditosCarregadas: Observable<any>;
+
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private despesaProvider: DespesaProvider,
               private creditoProvider: CreditoProvider,
-              private laodingCtrl: LoadingController) {
+              private laodingCtrl: LoadingController,
+              private decimalPipe: DecimalPipe) {
     this.gasto = this.navParams.data.gasto;
     this.presentLoading("Carregando detalhes dos gastos...");
     this.carregarDespesas();
@@ -45,25 +50,43 @@ export class GastoDetailPage {
 
   private carregarDespesas() {
     if (this.gasto.ids_despesas) {
+      var self = this;
+      this.despesasCarregadas = this.despesaProvider.getAll();
       var ids = this.gasto.ids_despesas.split('_@_');
       ids.forEach(id => {
-        var d = this.despesaProvider.getDespesaViewValues(id);
-        if (typeof d !== 'undefined') {
-          this.despesas.push(d);
-        }
-      });
+        this.despesasCarregadas.forEach(dc => {
+          dc.forEach(d => {
+            if (d.key == id) {
+              var despesa = new DespesaView();
+              despesa.dsc = d.dsc;
+              despesa.data = d.data_compra;
+              despesa.valor = self.decimalPipe.transform((d.valor / d.num_parcela), '1.2-2');
+              this.despesas.push(despesa);
+            }
+          });
+        })
+      })
     }
   }
 
   private carregarCreditos() {
     if (this.gasto.ids_creditos) {
+      var self = this;
+      this.creditosCarregadas = this.creditoProvider.getAll();
       var ids = this.gasto.ids_creditos.split('_@_');
       ids.forEach(id => {
-        var c = this.creditoProvider.getCreditoViewValues(id);
-        if (typeof c !== 'undefined') {
-          this.creditos.push(c);
-        }
-      });
+        this.creditosCarregadas.forEach(cc => {
+          cc.forEach(c => {
+            if (c.key == id) {
+              var credito = new CreditoView();
+              credito.dsc = c.dsc;
+              credito.data = c.data_inicial_recebimento;
+              credito.valor = self.decimalPipe.transform((c.valor / c.num_parcela), '1.2-2');
+              this.creditos.push(credito);
+            }
+          });
+        })
+      })
     }
   }
 

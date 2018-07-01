@@ -21,3 +21,6 @@ npm install --save @ionic-native/camera
 -- Instalar Data
 ionic cordova plugin add cordova-plugin-datepicker
 npm install --save @ionic-native/date-picker
+
+-- Istalar base64
+npm install --save @ionic-native/base64
