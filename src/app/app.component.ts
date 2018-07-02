@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
+import { Platform, Nav, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -16,6 +16,8 @@ import { DespesaListPage } from '../pages/despesa/despesa-list/despesa-list';
 import { CreditoListPage } from '../pages/credito/credito-list/credito-list';
 import { GastoListPage } from '../pages/gasto/gasto-list/gasto-list';
 
+import { timer } from 'rxjs/Observable/timer'
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -25,13 +27,21 @@ export class MyApp {
   public pages: Array<{ titulo: string, component: any, icon: string }>;
   private possuiCategoriaCadastrada: boolean = false;
 
+  showSplash = true;
+
   constructor(platform: Platform, 
               statusBar: StatusBar, 
               splashScreen: SplashScreen,
               afAuth: AngularFireAuth,
               private authService: AuthService) {
+    platform.ready().then(() => {
+      statusBar.styleDefault();
+      splashScreen.hide();
+      timer(3000).subscribe(() => this.showSplash = false);
+    });
+    
     afAuth.authState.subscribe(user => {
-      if (user) {
+      if (user && user.emailVerified) {
         this.rootPage = GastoListPage;
       } else {
         this.rootPage = SigninPage;
@@ -46,11 +56,6 @@ export class MyApp {
       { titulo: 'Controle Financeiro', component: GastoListPage, icon: 'md-list-box'},
       { titulo: 'Sair', component: 'sair', icon: 'md-log-out'}
     ];
-
-    platform.ready().then(() => {
-      statusBar.styleDefault();
-      splashScreen.hide();
-    });
   }
 
   goToPage(page){

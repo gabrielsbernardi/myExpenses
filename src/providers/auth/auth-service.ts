@@ -34,4 +34,8 @@ export class AuthService {
     userLogged() {
         return firebase.auth().currentUser;
     }
+
+    usuarioautenticado() {
+        return this.userLogged().emailVerified;
+    }
 }
