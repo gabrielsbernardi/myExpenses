@@ -43,6 +43,7 @@ export class GeralPage {
     this.loader.dismiss();
   }
 
+  // Carrega o gráfico de setores
   private carregarPieValues() {
     this.categorias = this.categoriaProvider.getAll();
     this.categorias.forEach(categorias => {
@@ -56,12 +57,14 @@ export class GeralPage {
     })
   }
 
+  // Define em quanto tempo deverá abrir o gráfico de linha
   ngAfterViewInit() {
     setTimeout(() => {
       this.lineCanvas = this.getLineCanvas();
     }, 150);
   }
 
+  // Seta os valores no gráfico de setores
   getPieCanvas() {
     var self = this;
     var labels = [];
@@ -100,6 +103,7 @@ export class GeralPage {
     })
   }
   
+  // Carrega o gráfico de linha
   getLineCanvas() {
     var self = this;
     var labels = [];
@@ -166,6 +170,7 @@ export class GeralPage {
     })
   }
 
+  // Cores dos gráficos
   private popularCores() {
     this.cores.push("#16A085");
     this.cores.push("#F39C12");
@@ -182,10 +187,12 @@ export class GeralPage {
     this.cores.push("#09C69D");
   }
 
+  // Recupera a cor
   private getCor() {
     return this.cores[Math.floor(Math.random() * (12 - 0 + 1)) + 0];
   }
 
+  // Apresenta dialog enquanto estiver fazendo o carregamento da tela
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg
