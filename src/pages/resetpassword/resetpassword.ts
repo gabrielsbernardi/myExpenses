@@ -21,6 +21,7 @@ export class ResetpasswordPage {
               private authService: AuthService) {
   }
 
+  // Manda um email para o email informado para realizar a alteração da senha.
   resetPassword() {
     if (this.form.valid) {
       let toast = this.toastCtrl.create({ duration: 3000, position: 'bottom' });
@@ -43,6 +44,7 @@ export class ResetpasswordPage {
     }
   }
 
+  // Volta para a tela de Login
   voltar() {
     this.navCtrl.setRoot(SigninPage);
   }
