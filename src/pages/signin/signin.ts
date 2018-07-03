@@ -34,14 +34,20 @@ export class SigninPage {
     document.getElementById('main-menu').hidden = true
   }
 
+  // Chama a tela de criação de conta
   createAccount() {
     this.navCtrl.setRoot(SignupPage);
   }
 
+  // Chama a tela de resetar a senha
   resetPassword() {
     this.navCtrl.setRoot(ResetpasswordPage);
   }
 
+  // Verifica se o usuário é valido
+  // Se true então verifica se o usuário autenticou o email
+  //  Se true então loga
+  //  Senão exibe a dialog de usuário não autenticado
   signIn() {
     if (this.form.valid) {
       let toast = this.toastCtrl.create({ duration: 3000, position: 'bottom' });
@@ -71,6 +77,7 @@ export class SigninPage {
     }
   }
 
+  // Exibe alerta de usuário não autenticado
   private showAlertUsuarioNaoAutenticado() {
     let alert = this.alertCtrl.create({
       title: 'Autenticação de Usuário Inválida',
@@ -85,6 +92,7 @@ export class SigninPage {
     alert.present();
   }
 
+  // Apresenta dialog enquanto estiver fazendo o carregamento da tela
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg
