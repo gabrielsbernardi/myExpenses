@@ -18,6 +18,7 @@ export class CategoriaProvider {
               private auth: AuthService) { 
   }
 
+  // Recupera todas as categorias
   getAll() {
     return this.db.list(this.PATH, ref => ref.orderByChild('tipo'))
       .snapshotChanges()
@@ -29,6 +30,7 @@ export class CategoriaProvider {
       });
   }
 
+  // Recupera um objeto com todos os dados da categoria
   getAllCategotiasViewValues() {
     var categorias: Array<categoriaView> = [];
     firebase.database().ref(this.PATH).on("child_added", function(c) {
@@ -40,6 +42,7 @@ export class CategoriaProvider {
     return categorias;
   }
 
+  // Recupera uma categoia específica
   get(key: string) {
     return this.db.object(this.PATH + key)
       .snapshotChanges()
@@ -50,6 +53,7 @@ export class CategoriaProvider {
       });
   }
 
+  // Salva a categoria
   save(categoria: any) {
     return new Promise((resolve, reject) => {
       if (categoria.key) {
@@ -67,6 +71,7 @@ export class CategoriaProvider {
     });
   }
 
+  // Remove a categoria
   remove(key: string) {
     return this.db.list(this.PATH).remove(key);
   }
