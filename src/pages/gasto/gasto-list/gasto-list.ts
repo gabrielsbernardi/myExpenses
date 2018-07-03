@@ -29,10 +29,12 @@ export class GastoListPage {
     this.loader.dismiss();
   }
 
+  // Chama a tela de detalhes do gasto passando o gasto específico selecionado
   detailGasto(gasto: any) {
     this.navCtrl.push('GastoDetailPage', {gasto: gasto});
   }
 
+  // Apresenta dialog enquanto estiver fazendo o carregamento da tela
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg
