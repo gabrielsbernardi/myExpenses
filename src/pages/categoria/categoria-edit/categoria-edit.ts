@@ -30,10 +30,12 @@ export class CategoriaEditPage {
     this.exibirFabBtnOptions = this.categoria.key;
   }
 
+  // Ajusta o título da página
   private setupPageTitle() {
     this.title = this.navParams.data.categoria ? 'Alteração da Categoria' : 'Nova Categoria'
   }
 
+  // Cria os valores que devem ser utilizados na tela
   createForm() {
     this.form = this.formBuilder.group({
       key: [this.categoria.key],
@@ -42,6 +44,7 @@ export class CategoriaEditPage {
     });
   }
 
+  // Salva a categoria
   onSubmit() {
     if (this.form.valid) {
       this.provider.save(this.form.value)
@@ -56,6 +59,7 @@ export class CategoriaEditPage {
     }
   }
 
+  // Remove a categoria
   removeCategoria() {
     this.provider.remove(this.categoria.key)
       .then(() => {
@@ -67,6 +71,7 @@ export class CategoriaEditPage {
       });
   }
 
+  // Exibe mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();

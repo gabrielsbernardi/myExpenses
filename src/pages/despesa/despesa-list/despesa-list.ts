@@ -35,6 +35,8 @@ export class DespesaListPage {
     this.categoriaProvider.getAllCategotiasViewValues();
   }
 
+  // Redireciona para a tela de cadastro de despesa
+  // caso já tenha uma categoria inclusa
   newDespesa() {
     if (this.categoriaProvider.getAllCategotiasViewValues().length > 0) {
       this.navCtrl.push('DespesaEditPage');
@@ -59,10 +61,12 @@ export class DespesaListPage {
     }
   }
 
+  // Redireciona para a tela de edição de despesa passando a despesa selecionada
   editDespesa(despesa: any) {
     this.navCtrl.push('DespesaEditPage', {despesa: despesa});
   }
 
+  // Remove a despesa selecionada
   removeDespesa(despesa: any) {
     this.presentLoading("Removendo despesa...");
     this.provider.remove(despesa)
@@ -76,15 +80,18 @@ export class DespesaListPage {
       });
   }
 
+  // Exibe a mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
 
+  // Verifica se deve ou não exibir a pesquisa de despesas
   toggleSearchbar() {
     this.showSearchbar = !this.showSearchbar;
   }
 
+  // Abrir as opções da despesa com o click na linha
   public open(itemSlide: ItemSliding, item: Item) {
     itemSlide.setElementClass("active-sliding", true);
     itemSlide.setElementClass("active-slide", true);
@@ -92,6 +99,8 @@ export class DespesaListPage {
     item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
   }
 
+  // Dialog de carregamento enquanto estiver fazendo
+  // execuções com o firebase 
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg

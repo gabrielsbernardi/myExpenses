@@ -25,8 +25,8 @@ export class MyApp {
   @ViewChild('NAV') nav: Nav;
   rootPage: any;
   public pages: Array<{ titulo: string, component: any, icon: string }>;
-  private possuiCategoriaCadastrada: boolean = false;
 
+  // Flag para exibir ou não o splash
   showSplash = true;
 
   constructor(platform: Platform, 
@@ -34,12 +34,17 @@ export class MyApp {
               splashScreen: SplashScreen,
               afAuth: AngularFireAuth,
               private authService: AuthService) {
+
+    // Carregamento inicial do software
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
       timer(3000).subscribe(() => this.showSplash = false);
     });
     
+    // Verifica se tem usuário logado
+    // Se true e email estiver verificado entra direto no sistema
+    // Senão manda para a tela de login
     afAuth.authState.subscribe(user => {
       if (user && user.emailVerified) {
         this.rootPage = GastoListPage;
@@ -48,6 +53,7 @@ export class MyApp {
       }
     });
     
+    // Cria os menus
     this.pages = [
       { titulo: 'Informações Gerais', component: GeralPage, icon: 'md-pie'},
       { titulo: 'Categoria', component: CategoriaListPage, icon: 'md-list-box'},
@@ -58,6 +64,7 @@ export class MyApp {
     ];
   }
 
+  // Redireciona para a página escolhida através do menu
   goToPage(page){
     if ('sair' === page) {
       this.signOut();
@@ -66,6 +73,7 @@ export class MyApp {
     }
   }
 
+  // Sai do sistema
   signOut() {
     this.authService.signOut()
       .then(() => {

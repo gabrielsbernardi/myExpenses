@@ -30,14 +30,17 @@ export class CategoriaListPage {
     this.loader.dismiss();
   }
 
+  // Redireciona para a tela de cadastro de categoria
   newCategoria() {
     this.navCtrl.push('CategoriaEditPage');
   }
 
+  // Redireciona para a tela de edição de categoria passando a categoria selecionada
   editCategoria(categoria: any) {
     this.navCtrl.push('CategoriaEditPage', {categoria: categoria});
   }
 
+  // Remove a categoria selecionada
   removeCategoria(key: string) {
     this.provider.remove(key)
       .then(() => {
@@ -48,15 +51,18 @@ export class CategoriaListPage {
       });
   }
 
+  // Exibe a mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
 
+  // Verifica se deve ou não exibir a pesquisa de categorias
   toggleSearchbar() {
     this.showSearchbar = !this.showSearchbar;
   }
 
+  // Abrir as opções da categoria com o click na linha
   public open(itemSlide: ItemSliding, item: Item) {
     itemSlide.setElementClass("active-sliding", true);
     itemSlide.setElementClass("active-slide", true);
@@ -64,6 +70,8 @@ export class CategoriaListPage {
     item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
   }
 
+  // Dialog de carregamento enquanto estiver fazendo
+  // execuções com o firebase 
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg

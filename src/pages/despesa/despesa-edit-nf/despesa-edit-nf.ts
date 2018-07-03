@@ -44,10 +44,12 @@ export class DespesaEditNfPage {
     this.loader.dismiss();
   }
 
+  // Configura o título da página
   private setupPageTitle() {
     this.title = 'Comprovante: ' + this.despesa.dsc;
   }
 
+  // Abre a câmera e prepara para a captura da imagem
   capture() {
     const cameraOptions: CameraOptions = {
         quality: 50,
@@ -63,6 +65,7 @@ export class DespesaEditNfPage {
     });
   }
 
+  // Faz o upload da imagem e salva o caminho na despesa
   private upload() {
     this.presentLoading("Salvando comprovante...");
     this.despesa = this.despesaProvider.upload(this.despesa, this.captureDataUrl, this.loader);
@@ -70,6 +73,7 @@ export class DespesaEditNfPage {
     this.showMessage('Comprovante salvo com sucesso.')
   }
 
+  // Remove a imagem
   remove() {
     this.presentLoading("Removendo comprovante...");
     this.despesa = this.despesaProvider.removeImage(this.despesa, this.loader, true);
@@ -78,11 +82,14 @@ export class DespesaEditNfPage {
     this.loader.dismiss();
   }
 
+  // Exibe a mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
 
+  // Dialog de carregamento enquanto estiver fazendo
+  // execuções com o firebase 
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg

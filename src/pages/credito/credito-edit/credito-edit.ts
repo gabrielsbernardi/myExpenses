@@ -43,10 +43,12 @@ export class CreditoEditPage {
     this.exibirFabBtnOptions = this.credito.key;
   }
   
+  // Configura o título da página
   private setupPageTitle() {
     this.title = this.navParams.data.credito ? 'Alteração da Crédito' : 'Novo Crédito'
   }
 
+  // Cria os valores que devem ser utilizados na tela
   createForm() {
     this.form = this.formBuilder.group({
       key: [this.credito.key],
@@ -57,6 +59,11 @@ export class CreditoEditPage {
     });
   }
 
+  // Salva os créditos e calcula as despesas mensais
+  // Caso for uma edição é verificado se houve alterações
+  // na data, número de parcelas ou o valor
+  // Se true então atualiza o calculo das despesas mensais
+  // Senão apenas salva. 
   onSubmit() {
     if (this.form.valid) {
       this.presentLoading("Salvando crédito...");
@@ -88,6 +95,7 @@ export class CreditoEditPage {
     }
   }
 
+  // Método para atualizar os gastos mensais
   private atualizarGastos() {
     if (this.credito.key && (this.dataAntiga != this.credito.data_inicial_recebimento 
           || this.numParcelasAntiga != this.credito.num_parcela
@@ -97,6 +105,7 @@ export class CreditoEditPage {
     }
   }
 
+  // Remove os créditos
   removeCredito() {
     this.presentLoading("Removendo crédito...");
     var key = this.form.value.key;
@@ -112,11 +121,14 @@ export class CreditoEditPage {
       });
   }
 
+  // Exibe a mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
 
+  // Dialog de carregamento enquanto estiver fazendo
+  // execuções com o firebase 
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg

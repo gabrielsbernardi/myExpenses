@@ -33,14 +33,17 @@ export class CreditoListPage {
     this.loader.dismiss();
   }
 
+  // Redireciona para a tela de cadastro de crédito
   newCredito() {
     this.navCtrl.push('CreditoEditPage');
   }
 
+  // Redireciona para a tela de edição de crédito passando o crédito selecionada
   editCredito(credito: any) {
     this.navCtrl.push('CreditoEditPage', {credito: credito});
   }
 
+  // Remove o credito selecionado
   removeCredito(credito: any) {
     this.presentLoading("Removendo crédito...");
     this.provider.remove(credito.key)
@@ -54,15 +57,18 @@ export class CreditoListPage {
       });
   }
 
+  // Exibe a mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
 
+  // Verifica se deve ou não exibir a pesquisa de créditos
   toggleSearchbar() {
     this.showSearchbar = !this.showSearchbar;
   }
 
+  // Abrir as opções do crédito com o click na linha
   public open(itemSlide: ItemSliding, item: Item) {
     itemSlide.setElementClass("active-sliding", true);
     itemSlide.setElementClass("active-slide", true);
@@ -70,6 +76,8 @@ export class CreditoListPage {
     item.setElementStyle("transform", "translate3d(63px, 0px, 0px)");
   }
 
+  // Dialog de carregamento enquanto estiver fazendo
+  // execuções com o firebase 
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg

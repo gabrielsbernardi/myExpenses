@@ -55,6 +55,7 @@ export class DespesaEditPage implements AfterViewInit {
     this.loader.dismiss();
   }
 
+  // Configura o título da página
   private setupPageTitle() {
     this.title = this.navParams.data.despesa ? 'Alteração da Despesa' : 'Nova Despesa'
   }
@@ -63,12 +64,14 @@ export class DespesaEditPage implements AfterViewInit {
     this.setupPage();
   }
 
+  // Verifica se é para mostrar o ícone de edição do comprovante
   private setupPage() {
     if (this.despesa.key) {
       this.updateBtnImageNF();
     }
   }
 
+  // Cria os valores que devem ser utilizados na tela
   createForm() {
     this.form = this.formBuilder.group({
       key: [this.despesa.key],
@@ -81,6 +84,11 @@ export class DespesaEditPage implements AfterViewInit {
     });
   }
 
+  // Salva as despesas e calcula as despesas mensais
+  // Caso for uma edição é verificado se houve alterações
+  // na data, número de parcelas, categoria ou o valor
+  // Se true então atualiza o calculo das despesas mensais
+  // Senão apenas salva. 
   onSubmit() {
     if (this.form.valid) {
       this.presentLoading("Salvando despesa...");
@@ -120,6 +128,7 @@ export class DespesaEditPage implements AfterViewInit {
     }
   }
 
+  // Método para atualizar os gastos mensais
   private atualizarGastos() {
     if (this.despesa.key && (this.dataAntiga != this.despesa.data_compra 
           || this.numParcelasAntiga != this.despesa.num_parcela
@@ -130,6 +139,7 @@ export class DespesaEditPage implements AfterViewInit {
     }
   }
 
+  // Remove os despesas
   removeDespesa() {
     this.presentLoading("Removendo despesa...");
     var despesaAux = this.form.value;
@@ -145,19 +155,24 @@ export class DespesaEditPage implements AfterViewInit {
       });
   }
 
+  // Redireciona para a tela de edição de comprovante
   editDespesaNF() {
     this.navCtrl.push('DespesaEditNfPage', {despesa: this.despesa});
   }
 
+  // Exibe a mensagem com o valor passado por parâmetro
   private showMessage(message: string) {
     this.toast.create({ message: message, duration: 3000})
             .present();
   }
 
+  // Exibe o botão de adicionar comprovante
   private updateBtnImageNF() {
     document.getElementById("btnImageNF").hidden = false;
   }
   
+  // Dialog de carregamento enquanto estiver fazendo
+  // execuções com o firebase 
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg
