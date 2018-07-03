@@ -27,6 +27,7 @@ export class GeralProvider {
               private decimalPipe: DecimalPipe) {
   }
 
+  // Retornar os valores do gráfico de setores
   getPieValues() {
     var self = this;
     this.pieValues = [];
@@ -42,6 +43,7 @@ export class GeralProvider {
     return this.pieValues;
   }
 
+  // Retorna o valor total gasto por categoria no mês atual
   getValorTotalGastosPorCategoria(idCategoria: string) {
     var valor = 0;
     var current = new Date();
@@ -57,6 +59,8 @@ export class GeralProvider {
     return valor;
   }
 
+  // Recupera as despesas e os créditos do mês atual, dos dois meses anteriores ao atual
+  // e dos dois próximos ao atual
   getLineValues() {
     var self = this;
     this.lineValues = [];
@@ -96,6 +100,7 @@ export class GeralProvider {
     return this.lineValues;
   }
 
+  // Recupera a data dos meses a serem consultados
   private getPaths() {
     var datas = [];
     var current = new Date();
@@ -117,6 +122,7 @@ export class GeralProvider {
     return datas;
   }
 
+  // Recupera o mês anterior em relação ao passado por parâmetro
   private getMesAnterior(data: string) {
     var separaData = data.split('-');
     var ano = parseInt(separaData[0]);
@@ -129,6 +135,7 @@ export class GeralProvider {
     return ano + '-' + (mes.toString().length == 1 ? ('0' + mes) : mes);
   }
 
+  // Recupera o próximo mês em relação ao passado por parâmetro
   private getMesDepois(data: string) {
     var separaData = data.split('-');
     var ano = parseInt(separaData[0]);
@@ -141,6 +148,7 @@ export class GeralProvider {
     return ano + '-' + (mes.toString().length == 1 ? ('0' + mes) : mes);
   }
 
+  // Recupera o nome inicial do mes
   private getDataExtenso(data: string) {
     var separaData = data.split('-');
     var mesExtenso;
@@ -191,6 +199,7 @@ export class GeralProvider {
     return mesExtenso + data;
   }
 
+  // Recupera os valores a serem apresentados referentes ao resumo do mês
   getGeralViewValues() {
     var current = new Date();
     var ano = current.getFullYear();
