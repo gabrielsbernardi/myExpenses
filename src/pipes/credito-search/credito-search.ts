@@ -8,6 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CreditoSearchPipe implements PipeTransform {
   
+  // Realiza a consulta baseada na descrição do crédito
   transform(items: any[], dsc: string): any[] {
     if(!items) return [];
     if(!dsc) return items;
