@@ -23,6 +23,7 @@ export class SignupPage {
               private authService: AuthService) {
   }
 
+  // Cria usuário caso o email seja válido e envia email de autenticação
   createAccount() {
     if (this.form.valid) {
       let toast = this.toastCtrl.create({ duration: 3000, position: 'bottom' });
@@ -51,6 +52,7 @@ export class SignupPage {
     }
   }
 
+  // Volta para a tela de login
   voltar() {
     this.navCtrl.setRoot(SigninPage);
   }
