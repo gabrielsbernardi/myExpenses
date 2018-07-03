@@ -31,6 +31,7 @@ export class GastoProvider {
               private decimalPipe: DecimalPipe) { 
   }
 
+  // Recupera todos os gastos e créditos separados pelos meses
   getAll() {
     this.arrayGastos = [];
     var self = this;
@@ -47,6 +48,7 @@ export class GastoProvider {
       var ref = firebase.database().ref(path);
       var valorGasto = 0;
 
+      // Recupera as despesas
       ref.on("child_added", function(gasto) {
         valorGasto += parseFloat(gasto.val().valor);
         if (typeof gastoView.ids_despesas !== 'undefined') {
@@ -60,6 +62,7 @@ export class GastoProvider {
       var ref = firebase.database().ref(pathCredito);
       var valorCredito = 0;
 
+      // Recupera os créditos
       ref.on("child_added", function(credito) {
         valorCredito += parseFloat(credito.val().valor);
         if (typeof gastoView.ids_creditos !== 'undefined') {
@@ -72,6 +75,7 @@ export class GastoProvider {
       gastoView.valorGasto = self.decimalPipe.transform(valorGasto, '1.2-2');
       gastoView.valorCredito = self.decimalPipe.transform(valorCredito, '1.2-2');
       gastoView.valor = valorCredito - valorGasto;
+      // Faz o cálculo para saber qual o valor gasto do mês
       gastoView.valorFormatado = self.decimalPipe.transform(valorCredito - valorGasto, '1.2-2');
 
       self.arrayGastos.push(gastoView);
@@ -80,6 +84,7 @@ export class GastoProvider {
     return this.arrayGastos;
   }
 
+  // Formata a data como por exemplo JAN 19
   private formatDataApresentacao(data: any) {
     var ano = data.substring(0, 4);
     var mes = data.substring(5, 7);
@@ -93,6 +98,7 @@ export class GastoProvider {
     return this.getMesExtenso(mes) + ' ' + ano.substring(2, 4);
   }
 
+  // Obten o nome inicial do mês
   private getMesExtenso(mes: string) {
     switch(mes) {
       case '01':
@@ -122,6 +128,7 @@ export class GastoProvider {
     }
   }
 
+  // Obtem o gasto específico
   get(key: string) {
     return this.db.object(this.PATH + key)
       .snapshotChanges()
@@ -132,6 +139,8 @@ export class GastoProvider {
       });
   }
 
+  // Salva o gasto baseado na despesa passada
+  // Salva conforme o número de parcelas informado
   saveDespesa(despesa: any) {
     return new Promise((resolve, reject) => {
       var anoMesCompra = (despesa.data_compra).substring(0, 7);
@@ -171,6 +180,7 @@ export class GastoProvider {
     });
   }
 
+  // Remove os gastos
   removeDespesa(idDespesa: string) {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
@@ -190,7 +200,8 @@ export class GastoProvider {
       this.db.list(gr.path).remove(gr.key);
     });
   }
-
+ 
+  // Formata a data da parcela
   private getFormatarDataParcela(anoCompra: number, mesCompra: number) {
     if (mesCompra.toString().length == 1) {
       return anoCompra + '-0' + mesCompra;
@@ -198,6 +209,7 @@ export class GastoProvider {
     return anoCompra + '-' + mesCompra;
   } 
 
+  // Serve para recuperar mes da próxima parcela
   private getMesProximaParcela(mesParcela: number) {
     if (mesParcela == 12) {
       return 1;
@@ -205,6 +217,7 @@ export class GastoProvider {
     return mesParcela + 1;
   }
 
+  // Serve para recuperar o ano da próxima parcela
   private getAnoProximaParcela(anoParcela: number, virarAno: boolean) {
     if (virarAno) {
       return anoParcela + 1;
@@ -212,6 +225,7 @@ export class GastoProvider {
     return anoParcela;
   }
 
+  // Salva o crédito no mês baseado no número de parcelas
   saveCredito(credito: any) {
     return new Promise((resolve, reject) => {
       var anoMesRecebimento = (credito.data_inicial_recebimento).substring(0, 7);
@@ -249,6 +263,7 @@ export class GastoProvider {
     });
   }
 
+  // Remove o crédito
   removeCredito(idCredito: string) {
     var pathPrincipal = this.PATH
     var refPrincipal = firebase.database().ref(pathPrincipal);
