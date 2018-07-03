@@ -21,6 +21,7 @@ export class DespesaProvider {
               private decimalPipe: DecimalPipe) { 
   }
 
+  // Recupera todas as despesas
   getAll() {
     var self = this;
     return this.db.list(this.PATH, ref => ref.orderByChild('data_compra'))
@@ -35,6 +36,7 @@ export class DespesaProvider {
       });
   }
 
+  // Formata a data no padrão dd/MM/yyyy
   private formatDate(d) {
     var date = new Date(d);
     let month = String(date.getMonth() + 1);
@@ -47,6 +49,7 @@ export class DespesaProvider {
     return `${day}/${month}/${year}`;
   }
 
+  // Recupera uma despesa específica
   get(key: string) {
     return this.db.object(this.PATH + key)
       .snapshotChanges()
@@ -57,6 +60,7 @@ export class DespesaProvider {
      });
   }
 
+  // Salva a despesa
   save(despesa: any) {
     return new Promise((resolve, reject) => {
       if (!despesa.url_imagem) {
@@ -98,11 +102,13 @@ export class DespesaProvider {
     });
   }
 
+  // Remove a despesa
   remove(item: any) {
     this.removeImage(item, null, false);
     return this.db.list(this.PATH).remove(item.key);
   }
 
+  // Faz o upload do comprovante e seta o caminho da imagem na despesa
   upload(despesa: any, captureDataUrl: string, loader: any) {
     var self = this;
     let storageRef = firebase.storage().ref();
@@ -117,6 +123,7 @@ export class DespesaProvider {
     });
   }
 
+  // Remove a imagem da despesa e exclui da storage
   removeImage(despesa: any, loader: any, salvarDespesa: boolean) {
     var self = this;
     let storageRef = firebase.storage().ref();
