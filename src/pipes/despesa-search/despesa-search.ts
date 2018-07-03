@@ -8,6 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DespesaSearchPipe implements PipeTransform {
   
+  // Realiza a consulta baseada na descrição da despesa
   transform(items: any[], dsc: string): any[] {
     if(!items) return [];
     if(!dsc) return items;
