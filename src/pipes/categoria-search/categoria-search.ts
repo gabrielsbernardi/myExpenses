@@ -8,6 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CategoriaSearchPipe implements PipeTransform {
  
+  // Pesquisa de categoria através do tipo
   transform(items: any[], tipo: string): any[] {
     if(!items) return [];
     if(!tipo) return items;
