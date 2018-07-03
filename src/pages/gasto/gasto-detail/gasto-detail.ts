@@ -43,11 +43,13 @@ export class GastoDetailPage {
     this.title = this.gasto.data;
     this.loader.dismiss();
   }
-
+  
+  // Seleciona a tab de gastos como a inicial
   ionViewWillEnter(){
     this.dadosMesSelect = "gasto";
   }
 
+  // Carrega todas as despesas referente ao mês
   private carregarDespesas() {
     if (this.gasto.ids_despesas) {
       var self = this;
@@ -69,6 +71,7 @@ export class GastoDetailPage {
     }
   }
 
+  // Carrega todos os créditos referente ao mês
   private carregarCreditos() {
     if (this.gasto.ids_creditos) {
       var self = this;
@@ -90,6 +93,7 @@ export class GastoDetailPage {
     }
   }
 
+  // Apresenta dialog enquanto estiver fazendo o carregamento da tela
   private presentLoading(msg: string) {
     this.loader = this.laodingCtrl.create({
       content: msg
