@@ -18,6 +18,7 @@ export class CreditoProvider {
               private decimalPipe: DecimalPipe) { 
   }
 
+  // Recupera todos os créditos
   getAll() {
     var self = this;
     return this.db.list(this.PATH, ref => ref.orderByChild('data_inicial_recebimento'))
@@ -32,6 +33,7 @@ export class CreditoProvider {
       });
   }
 
+  // Formata a data com dd/MM/yyyy
   private formatDate(d) {
     var date = new Date(d);
     let month = String(date.getMonth() + 1);
@@ -44,6 +46,7 @@ export class CreditoProvider {
     return `${day}/${month}/${year}`;
   }
 
+  // Recupera um crédito específico
   get(key: string) {
     return this.db.object(this.PATH + key)
       .snapshotChanges()
@@ -54,6 +57,7 @@ export class CreditoProvider {
       });
   }
 
+  // Salva o crédito
   save(credito: any) {
     return new Promise((resolve, reject) => {
       if (credito.key) {
@@ -75,6 +79,7 @@ export class CreditoProvider {
     });
   }
 
+  // Remove o crédito
   remove(key: string) {
     return this.db.list(this.PATH).remove(key);
   }
